@@ -19,7 +19,7 @@ tileCol = 6
 tileRow = 7
 
 gagrid = GeoadminTileGrid()
-# With extent contraint
+# With extent constraint
 offset = 50000
 gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offset,
                                         gagrid.MAXX - offset, gagrid.MAXY - offset])
@@ -35,7 +35,7 @@ tileAddress = [tileRow, tileCol] = gagrid.tileAddress(zoom, topLeftCorner)
 print tileAddress
 >>>> [6, 7]
 
-# It also works is the point is within the tile
+# It also works if the point is within the tile
 pointInTile = [topLeftCorner[0] + 200.0, topLeftCorner[1] - 200.0]
 print gagrid.tileAddress(zoom, pointInTile)
 >>>> [6, 7]
