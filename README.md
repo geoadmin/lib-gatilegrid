@@ -56,6 +56,7 @@ print gagrid.tileSize(zoom)
 print gagrid.numberOfTilesAtZoom(zoom)
 >>>> 950
 # Extent dependent
+print gagridExtent.numberOfTilesAtZoom(zoom)
 >>>> 540
 
 # Generate tilesSpec
