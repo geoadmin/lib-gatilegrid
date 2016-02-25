@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 
 
-setup(name='poolmanager',
+setup(name='gatilegrid',
       version='0.0.1',
       description='Geoadmin custom tile grid for web mapping applications',
       classifiers=[],
