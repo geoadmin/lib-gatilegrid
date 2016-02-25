@@ -57,15 +57,15 @@ class GeoadminTileGrid:
             assert extent[1] >= self.MINY
             assert extent[2] <= self.MAXX
             assert extent[3] <= self.MAXY
-            self.extent = extent 
+            self.extent = extent
         else:
             self.extent = [self.MINX, self.MINY, self.MAXX, self.MAXY]
         self.origin = [self.extent[0], self.extent[3]]  # Top left corner
         self.tileSizePx = tileSizePx  # In pixels
         self.tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
-    
+
     def tileSize(self, zoom):
-        "Returns the size (in meters) of a tile" 
+        "Returns the size (in meters) of a tile"
         assert zoom in range(0, len(self.RESOLUTIONS))
         return self.tileSizePx * self.RESOLUTIONS[int(zoom)]
 
@@ -89,8 +89,8 @@ class GeoadminTileGrid:
         tileS = self.tileSize(zoom)
         offsetX = self.XSPAN - (self.MAXX - x)
         offsetY = self.YSPAN - (y - self.MINY)
-        totNbTilesX = math.ceil(self.XSPAN / self.tileSize(zoom))
-        totNbTilesY = math.ceil(self.YSPAN / self.tileSize(zoom))
+        totNbTilesX = math.ceil(self.XSPAN / tileS)
+        totNbTilesY = math.ceil(self.YSPAN / tileS)
         return [
             int(round((offsetX / self.XSPAN) * totNbTilesX)),  # Row
             int(round((offsetY / self.YSPAN) * totNbTilesY))  # Col
@@ -102,7 +102,7 @@ class GeoadminTileGrid:
         assert maxZoom in range(0, len(self.RESOLUTIONS))
         assert minZoom <= maxZoom
 
-        for zoom in xrange(minZoom, maxZoom + 1):
+        for zoom in range(minZoom, maxZoom + 1):
             maxX = self.extent[2]
             minY = self.extent[1]
             [tileRow, tileCol] = self.tileAddress(zoom, self.origin)
@@ -118,15 +118,16 @@ class GeoadminTileGrid:
 
     def numberOfXTilesAtZoom(self, zoom):
         "Returns the number of tiles over x at a given zoom level"
-        return math.ceil(self.xSpan / self.tileSize(zoom))
+        return int(math.ceil(self.xSpan / self.tileSize(zoom)))
 
     def numberOfYTilesAtZoom(self, zoom):
         "Retrurns the number of tiles over y at a given zoom level"
-        return math.ceil(self.ySpan / self.tileSize(zoom))
+        return int(math.ceil(self.ySpan / self.tileSize(zoom)))
 
     def numberOfTilesAtZoom(self, zoom):
         "Returns the total number of tile at a given zoom level"
-        return self.numberOfXTilesAtZoom(zoom) * self.numberOfYTilesAtZoom(zoom)
+        return self.numberOfXTilesAtZoom(zoom) * \
+            self.numberOfYTilesAtZoom(zoom)
 
     def getResolution(self, zoom):
         "Return the image resolution at a given zoom level"
@@ -141,13 +142,9 @@ class GeoadminTileGrid:
     @property
     def xSpan(self):
         "Returns the range in meters over x"
-        if self.extent:
-            return self.extent[2] - self.extent[0]
-        return self.XSPAN
+        return self.extent[2] - self.extent[0]
 
     @property
     def ySpan(self):
         "Returns the range in meters over y"
-        if self.extent:
-            return self.extent[3] - self.extent[1]
-        return self.YSPAN
+        return self.extent[3] - self.extent[1]

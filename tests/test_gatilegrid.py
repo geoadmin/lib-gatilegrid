@@ -35,7 +35,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
             raise Exception('tileSize: assertion error not raised')
 
         self.assertEqual(gagrid.tileAddressTemplate,
-            '{zoom}/{tileCol}/{tileRow}')
+                         '{zoom}/{tileCol}/{tileRow}')
 
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGrid()
@@ -50,7 +50,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         except Exception as e:
             self.assertIsInstance(e, AssertionError)
         else:
-            raise Exception('tileBounds: assertion error not raised') 
+            raise Exception('tileBounds: assertion error not raised')
 
         ta = gagrid.tileAddress(0, [gagrid.MINX, gagrid.MAXY])
         self.assertEqual(ta[0], 0)
@@ -84,27 +84,30 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         try:
             for i in gagrid.iterGrid(13, 33):
-                print i
+                print(i)
         except Exception as e:
             self.assertIsInstance(e, AssertionError)
         else:
-            raise Exception('iterGrid: assertion error maxZoom too big not raised')
+            raise Exception('iterGrid: assertion error maxZoom \
+                            too big not raised')
 
         try:
             for i in gagrid.iterGrid(-1, 11):
-                print i
+                print(i)
         except Exception as e:
             self.assertIsInstance(e, AssertionError)
         else:
-            raise Exception('iterGrid: assertion error minZoom too small not raised')
+            raise Exception('iterGrid: assertion error minZoom \
+                            too small not raised')
 
         try:
             for i in gagrid.iterGrid(13, 11):
-                print i
+                print(i)
         except Exception as e:
             self.assertIsInstance(e, AssertionError)
         else:
-            raise Exception('iterGrid: assertion error maxZoom bigger than minZoom not raised')
+            raise Exception('iterGrid: assertion error maxZoom \
+                            bigger than minZoom not raised')
 
     def testGetScale(self):
         gagrid = GeoadminTileGrid()
