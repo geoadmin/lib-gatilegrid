@@ -20,7 +20,7 @@ tileRow = 7
 
 gagrid = GeoadminTileGrid()
 # With extent constraint
-offset = 50000
+offset = 100000
 gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offset,
                                         gagrid.MAXX - offset, gagrid.MAXY - offset])
 
@@ -54,10 +54,10 @@ print gagrid.tileSize(zoom)
 
 # Number of tiles at zoom
 print gagrid.numberOfTilesAtZoom(zoom)
->>>> 950
+>>>> 988
 # Extent dependent
 print gagridExtent.numberOfTilesAtZoom(zoom)
->>>> 540
+>>>> 253
 
 # Generate tilesSpec
 counter = 0
@@ -71,10 +71,10 @@ for t in tilesSpecGenerator:
     if counter == 2:
         break
 >>>> ([420000.0, 286000.0, 484000.0, 350000.0], 16, 0, 0)
->>>> ([420000.0, 222000.0, 484000.0, 286000.0], 16, 0, 1)
+>>>> ([484000.0, 286000.0, 548000.0, 350000.0], 16, 1, 0)
 # Extent dependent
 counter = 0
-tilesSpecGeneratorExtent = gagridExtenti.iterGrid(minZoom, maxZoom)
+tilesSpecGeneratorExtent = gagridExtent.iterGrid(minZoom, maxZoom)
 for t in tilesSpecGeneratorExtent:
     (tileBounds, zoom, tileCol, tileRow) = t
     print t
@@ -82,7 +82,7 @@ for t in tilesSpecGeneratorExtent:
     if counter == 2:
         break
 >>>> ([484000.0, 222000.0, 548000.0, 286000.0], 16, 1, 1)
->>>> ([484000.0, 158000.0, 548000.0, 222000.0], 16, 1, 2)
+>>>> ([548000.0, 222000.0, 612000.0, 286000.0], 16, 2, 1)
 
 ```
 
