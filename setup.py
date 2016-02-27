@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='gatilegrid',
-      version='0.0.1',
+      version='0.0.2',
       description='Geoadmin custom tile grid for web mapping applications',
       classifiers=[],
       keywords='',
@@ -16,7 +16,7 @@ setup(name='gatilegrid',
       include_package_data=True,
       zip_safe=False,
       test_suite='nose.collector',
-      install_requires=[],
+      install_requires=['future'],
       )
       
 

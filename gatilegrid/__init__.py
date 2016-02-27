@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+from past.builtins import xrange
 
 
 class GeoadminTileGrid:
@@ -39,6 +40,8 @@ class GeoadminTileGrid:
     ]
 
     # Default Swiss extent
+    # For simplicity sake we'll use (x, y) convention
+    # when it's really the (y, x) swiss coordinate system we're using
     MINX = 420000.0
     MAXX = 900000.0
     MINY = 30000.0
@@ -72,28 +75,28 @@ class GeoadminTileGrid:
     def tileBounds(self, zoom, tileCol, tileRow):
         "Returns the bounds of a tile in LV03 (EPSG:21781)"
         assert zoom in range(0, len(self.RESOLUTIONS))
-        minX = self.MINX + (tileCol * self.tileSize(zoom))
-        minY = self.MAXY - ((tileRow + 1) * self.tileSize(zoom))
-        maxX = self.MINX + ((tileCol + 1) * self.tileSize(zoom))
-        maxY = self.MAXY - (tileRow * self.tileSize(zoom))
+        # 0,0 at top left: y axis down and x axis right
+        tileSize = self.tileSize(zoom)
+        minX = self.MINX + (tileCol * tileSize)
+        minY = self.MAXY - ((tileRow + 1) * tileSize)
+        maxX = self.MINX + ((tileCol + 1) * tileSize)
+        maxY = self.MAXY - (tileRow * tileSize)
         return [minX, minY, maxX, maxY]
 
-    def tileAddress(self, zoom, topLeft):
+    def tileAddress(self, zoom, point):
         "Returns a tile address based on a zoom level and \
         the top left coordinate of a tile"
-        [x, y] = topLeft
+        [x, y] = point
         assert x <= self.MAXX and x >= self.MINX
         assert y <= self.MAXY and y >= self.MINY
         assert zoom in range(0, len(self.RESOLUTIONS))
 
         tileS = self.tileSize(zoom)
-        offsetX = self.XSPAN - (self.MAXX - x)
-        offsetY = self.YSPAN - (y - self.MINY)
-        totNbTilesX = math.ceil(self.XSPAN / tileS)
-        totNbTilesY = math.ceil(self.YSPAN / tileS)
+        offsetX = x - self.MINX
+        offsetY = self.MAXY - y
         return [
-            int(round((offsetX / self.XSPAN) * totNbTilesX)),  # Row
-            int(round((offsetY / self.YSPAN) * totNbTilesY))  # Col
+            int(math.floor(offsetY / tileS)),  # Row
+            int(math.floor(offsetX / tileS))  # Col
         ]
 
     def iterGrid(self, minZoom, maxZoom):
@@ -102,32 +105,27 @@ class GeoadminTileGrid:
         assert maxZoom in range(0, len(self.RESOLUTIONS))
         assert minZoom <= maxZoom
 
-        for zoom in range(minZoom, maxZoom + 1):
-            maxX = self.extent[2]
-            minY = self.extent[1]
-            [tileRow, tileCol] = self.tileAddress(zoom, self.origin)
-            while self.extent[2] >= maxX:
-                while self.extent[1] <= minY:
-                    tileBounds = self.tileBounds(zoom, tileCol, tileRow)
-                    [minX, minY, maxX, maxY] = tileBounds
-                    yield (tileBounds, zoom, tileCol, tileRow)
-                    tileRow += 1
-                minY = self.extent[1]
-                tileCol += 1
-                tileRow = 0
+        for zoom in xrange(minZoom, maxZoom + 1):
+            [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
+            for row in xrange(minRow, maxRow + 1):
+                for col in xrange(minCol, maxCol + 1):
+                    tileBounds = self.tileBounds(zoom, col, row)
+                    yield (tileBounds, zoom, col, row)
 
     def numberOfXTilesAtZoom(self, zoom):
         "Returns the number of tiles over x at a given zoom level"
-        return int(math.ceil(self.xSpan / self.tileSize(zoom)))
+        [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
+        return maxCol - minCol + 1
 
     def numberOfYTilesAtZoom(self, zoom):
-        "Retrurns the number of tiles over y at a given zoom level"
-        return int(math.ceil(self.ySpan / self.tileSize(zoom)))
+        "Retruns the number of tiles over y at a given zoom level"
+        [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
+        return maxRow - minRow + 1
 
     def numberOfTilesAtZoom(self, zoom):
         "Returns the total number of tile at a given zoom level"
-        return self.numberOfXTilesAtZoom(zoom) * \
-            self.numberOfYTilesAtZoom(zoom)
+        [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
+        return (maxCol - minCol + 1) * (maxRow - minRow + 1)
 
     def getResolution(self, zoom):
         "Return the image resolution at a given zoom level"
@@ -138,6 +136,15 @@ class GeoadminTileGrid:
         (1:x e.g. 1 map unit equal x unit in the real world)"
         inchesPerMeters = 39.37
         return self.getResolution(zoom) * inchesPerMeters * dpi
+
+    def getExtentAddress(self, zoom):
+        minX = self.extent[0]
+        maxY = self.extent[3]
+        [minRow, minCol] = self.tileAddress(zoom, [minX, maxY])
+        maxX = self.extent[2]
+        minY = self.extent[1]
+        [maxRow, maxCol] = self.tileAddress(zoom, [maxX, minY])
+        return [minRow, minCol, maxRow, maxCol]
 
     @property
     def xSpan(self):
