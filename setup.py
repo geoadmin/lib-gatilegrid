@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+# HACK for `nose.collector` to work on python 2.7.3 and earlier
+import multiprocessing
 from setuptools import setup, find_packages
 
 
