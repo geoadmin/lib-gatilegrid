@@ -85,7 +85,7 @@ class GeoadminTileGrid:
 
     def tileAddress(self, zoom, point):
         "Returns a tile address based on a zoom level and \
-        the top left coordinate of a tile"
+        a point in the tile"
         [x, y] = point
         assert x <= self.MAXX and x >= self.MINX
         assert y <= self.MAXY and y >= self.MINY
@@ -94,9 +94,16 @@ class GeoadminTileGrid:
         tileS = self.tileSize(zoom)
         offsetX = x - self.MINX
         offsetY = self.MAXY - y
+        row = offsetY / tileS
+        col = offsetX / tileS
+        # We are exactly on the edge of a tile
+        if y in (self.MINY, self.MAXY) and row.is_integer():
+            row = max(0, row - 1)
+        if x in (self.MINX, self.MAXX) and col.is_integer():
+            col = max(0, col - 1)
         return [
-            int(math.floor(offsetY / tileS)),  # Row
-            int(math.floor(offsetX / tileS))  # Col
+            int(math.floor(row)),
+            int(math.floor(col))
         ]
 
     def iterGrid(self, minZoom, maxZoom):

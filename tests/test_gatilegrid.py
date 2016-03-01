@@ -147,7 +147,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         nby = gagrid.numberOfYTilesAtZoom(zoom)
         self.assertGreater(maxCol, maxRow)
         self.assertEqual(len([t for t in gagrid.iterGrid(zoom, zoom)]), nb)
-        self.assertEqual(nb, 23688)
+        self.assertEqual(nb, 23500)
         self.assertEqual(nb, nbx * nby)
         self.assertGreater(nbx, nby)
 
@@ -158,6 +158,6 @@ class TestGeoadminTileGrid(unittest.TestCase):
         nby = gagrid.numberOfYTilesAtZoom(zoom)
         self.assertGreater(maxCol, maxRow)
         self.assertEqual(len([t for t in gagrid.iterGrid(zoom, zoom)]), nb)
-        self.assertEqual(nb, 376251)
+        self.assertEqual(nb, 375000)
         self.assertEqual(nb, nbx * nby)
         self.assertGreater(nbx, nby)

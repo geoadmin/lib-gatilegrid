@@ -54,7 +54,7 @@ print gagrid.tileSize(zoom)
 
 # Number of tiles at zoom
 print gagrid.numberOfTilesAtZoom(zoom)
->>>> 988
+>>>> 950
 # Extent dependent
 print gagridExtent.numberOfTilesAtZoom(zoom)
 >>>> 253
