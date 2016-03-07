@@ -94,16 +94,16 @@ class GeoadminTileGrid:
         tileS = self.tileSize(zoom)
         offsetX = x - self.MINX
         offsetY = self.MAXY - y
-        row = offsetY / tileS
         col = offsetX / tileS
-        # We are exactly on the edge of a tile
-        if y in (self.MINY, self.MAXY) and row.is_integer():
-            row = max(0, row - 1)
+        row = offsetY / tileS
+        # We are exactly on the edge of a tile and the extent
         if x in (self.MINX, self.MAXX) and col.is_integer():
             col = max(0, col - 1)
+        if y in (self.MINY, self.MAXY) and row.is_integer():
+            row = max(0, row - 1)
         return [
-            int(math.floor(row)),
-            int(math.floor(col))
+            int(math.floor(col)),
+            int(math.floor(row))
         ]
 
     def iterGrid(self, minZoom, maxZoom):
@@ -147,10 +147,10 @@ class GeoadminTileGrid:
     def getExtentAddress(self, zoom):
         minX = self.extent[0]
         maxY = self.extent[3]
-        [minRow, minCol] = self.tileAddress(zoom, [minX, maxY])
+        [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
         maxX = self.extent[2]
         minY = self.extent[1]
-        [maxRow, maxCol] = self.tileAddress(zoom, [maxX, minY])
+        [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
         return [minRow, minCol, maxRow, maxCol]
 
     @property
