@@ -83,6 +83,16 @@ class Grid:
             int(math.floor(row))
         ]
 
+    def getExtentAddress(self, extent):
+        fromCellCoordinate = extent[:2]
+        toCellCoordinate = extent[2:4]
+        colFrom, rowFrom = \
+            self.cellAddressFromPointCoordinate(fromCellCoordinate)
+        colTo, rowTo = \
+            self.cellAddressFromPointCoordinate(toCellCoordinate)
+        return [min(colFrom, colTo), min(rowFrom, rowTo),
+                max(colFrom, colTo), max(rowFrom, rowTo)]
+
     def inExtent(self, pointCoordinate):
         [x, y] = pointCoordinate
         return x >= self.MINX and x <= self.MAXX and \

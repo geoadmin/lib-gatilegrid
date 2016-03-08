@@ -77,6 +77,19 @@ class TestGeoadminTileGrid(unittest.TestCase):
         cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
         self.assertEqual(cellAddress, None)
 
+        extentAddress = grid.getExtentAddress(extent)
+        self.assertEqual(grid.extentAddress[0], extentAddress[0])
+        self.assertEqual(grid.extentAddress[1], extentAddress[1])
+        self.assertEqual(grid.extentAddress[2], extentAddress[2])
+        self.assertEqual(grid.extentAddress[3], extentAddress[3])
+
+        extent_sub = [20, 20, 40, 40]
+        extentAddress_sub = grid.getExtentAddress(extent_sub)
+        self.assertLess(extentAddress[0], extentAddress_sub[0])
+        self.assertLess(extentAddress[1], extentAddress_sub[1])
+        self.assertGreater(extentAddress[2], extentAddress_sub[2])
+        self.assertGreater(extentAddress[3], extentAddress_sub[3])
+
     def testGridTopLeft(self):
         extent = [minx, miny, maxx, maxy] = [0, 0, 100, 100]
         resolutionX = 5
@@ -147,6 +160,19 @@ class TestGeoadminTileGrid(unittest.TestCase):
         cellOutsideExtent = [200, 200]
         cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
         self.assertEqual(cellAddress, None)
+
+        extentAddress = grid.getExtentAddress(extent)
+        self.assertEqual(grid.extentAddress[0], extentAddress[0])
+        self.assertEqual(grid.extentAddress[1], extentAddress[1])
+        self.assertEqual(grid.extentAddress[2], extentAddress[2])
+        self.assertEqual(grid.extentAddress[3], extentAddress[3])
+
+        extent_sub = [20, 20, 40, 40]
+        extentAddress_sub = grid.getExtentAddress(extent_sub)
+        self.assertLess(extentAddress[0], extentAddress_sub[0])
+        self.assertLess(extentAddress[1], extentAddress_sub[1])
+        self.assertGreater(extentAddress[2], extentAddress_sub[2])
+        self.assertGreater(extentAddress[3], extentAddress_sub[3])
 
     def testGridTopRight(self):
         extent = [minx, miny, maxx, maxy] = [0, 0, 100, 100]
@@ -224,6 +250,19 @@ class TestGeoadminTileGrid(unittest.TestCase):
         cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
         self.assertEqual(cellAddress, None)
 
+        extentAddress = grid.getExtentAddress(extent)
+        self.assertEqual(grid.extentAddress[0], extentAddress[0])
+        self.assertEqual(grid.extentAddress[1], extentAddress[1])
+        self.assertEqual(grid.extentAddress[2], extentAddress[2])
+        self.assertEqual(grid.extentAddress[3], extentAddress[3])
+
+        extent_sub = [20, 20, 40, 40]
+        extentAddress_sub = grid.getExtentAddress(extent_sub)
+        self.assertLess(extentAddress[0], extentAddress_sub[0])
+        self.assertLess(extentAddress[1], extentAddress_sub[1])
+        self.assertGreater(extentAddress[2], extentAddress_sub[2])
+        self.assertGreater(extentAddress[3], extentAddress_sub[3])
+
     def testGridBottomRight(self):
         extent = [minx, miny, maxx, maxy] = [0, 0, 100, 100]
         resolutionX = -5
@@ -295,3 +334,16 @@ class TestGeoadminTileGrid(unittest.TestCase):
         cellOutsideExtent = [200, 200]
         cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
         self.assertEqual(cellAddress, None)
+
+        extentAddress = grid.getExtentAddress(extent)
+        self.assertEqual(grid.extentAddress[0], extentAddress[0])
+        self.assertEqual(grid.extentAddress[1], extentAddress[1])
+        self.assertEqual(grid.extentAddress[2], extentAddress[2])
+        self.assertEqual(grid.extentAddress[3], extentAddress[3])
+
+        extent_sub = [20, 20, 40, 40]
+        extentAddress_sub = grid.getExtentAddress(extent_sub)
+        self.assertLess(extentAddress[0], extentAddress_sub[0])
+        self.assertLess(extentAddress[1], extentAddress_sub[1])
+        self.assertGreater(extentAddress[2], extentAddress_sub[2])
+        self.assertGreater(extentAddress[3], extentAddress_sub[3])
