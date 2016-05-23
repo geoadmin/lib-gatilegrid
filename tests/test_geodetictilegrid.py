@@ -8,7 +8,7 @@ class TestGlobalWebmercatorTileGrid(unittest.TestCase):
 
     def testTileGridWrongExtent(self):
         try:
-            GeodeticTileGrid(extent=[ -200.0, -200.0, 0.0, 0.0])
+            GeodeticTileGrid(extent=[-200.0, -200.0, 0.0, 0.0])
         except Exception as e:
             self.assertIsInstance(e, AssertionError)
         else:
@@ -23,7 +23,6 @@ class TestGlobalWebmercatorTileGrid(unittest.TestCase):
             raise Exception('GeodeticTileGrid instance: extent assertion error \
                 inconsistent not raised')
 
-
     def testNumberOfTiles(self):
         zoom = 1
         grid = GeodeticTileGrid()
@@ -36,5 +35,3 @@ class TestGlobalWebmercatorTileGrid(unittest.TestCase):
         self.assertEqual(nb, 8)
         self.assertEqual(nb, nbx * nby)
         self.assertGreater(nbx, nby)
-
-
