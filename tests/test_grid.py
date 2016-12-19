@@ -74,8 +74,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(gridCellsSpec[nbCells - 1][2], maxRow)
 
         cellOutsideExtent = [200, 200]
-        cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
-        self.assertEqual(cellAddress, None)
+        [col, row] = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
+        self.assertEqual(col, None)
+        self.assertEqual(row, None)
 
         extentAddress = grid.getExtentAddress(extent)
         self.assertEqual(grid.extentAddress[0], extentAddress[0])
@@ -158,8 +159,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(gridCellsSpec[nbCells - 1][2], maxRow)
 
         cellOutsideExtent = [200, 200]
-        cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
-        self.assertEqual(cellAddress, None)
+        [col, row] = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
+        self.assertEqual(col, None)
+        self.assertEqual(row, None)
 
         extentAddress = grid.getExtentAddress(extent)
         self.assertEqual(grid.extentAddress[0], extentAddress[0])
@@ -247,8 +249,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(gridCellsSpec[nbCells - 1][2], maxRow)
 
         cellOutsideExtent = [200, 200]
-        cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
-        self.assertEqual(cellAddress, None)
+        [col, row] = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
+        self.assertEqual(col, None)
+        self.assertEqual(row, None)
 
         extentAddress = grid.getExtentAddress(extent)
         self.assertEqual(grid.extentAddress[0], extentAddress[0])
@@ -332,8 +335,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(gridCellsSpec[nbCells - 1][2], maxRow)
 
         cellOutsideExtent = [200, 200]
-        cellAddress = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
-        self.assertEqual(cellAddress, None)
+        [col, row] = grid.cellAddressFromPointCoordinate(cellOutsideExtent)
+        self.assertEqual(col, None)
+        self.assertEqual(row, None)
 
         extentAddress = grid.getExtentAddress(extent)
         self.assertEqual(grid.extentAddress[0], extentAddress[0])
