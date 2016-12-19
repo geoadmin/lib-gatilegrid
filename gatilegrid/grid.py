@@ -58,7 +58,7 @@ class Grid:
 
     def cellAddressFromPointCoordinate(self, pointCoordinate):
         if not self.inExtent(pointCoordinate):
-            return None
+            return [None, None]
 
         [x, y] = pointCoordinate
 
