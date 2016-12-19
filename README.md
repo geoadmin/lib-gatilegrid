@@ -2,8 +2,7 @@
 gatilegrid
 ===========
 
-[![Build Status](https://travis-ci.org/loicgasser/gatilegrid.svg?branch=master)](https://travis-ci.org/loicgasser/gatilegrid)
-[![Coverage Status](https://coveralls.io/repos/github/loicgasser/gatilegrid/badge.svg?branch=master)](https://coveralls.io/github/loicgasser/gatilegrid?branch=master)
+[![Build Status](https://travis-ci.org/geoadmin/gatilegrid.svg?branch=master)](https://travis-ci.org/geoadmin/gatilegrid)
 
 ## Geoadmin custom tile grid for web mapping applications
 
