@@ -7,6 +7,12 @@ gatilegrid
 
 gatilegrid is compatible with python 2.7 and 3.5
 
+## Installation
+
+```bash
+$ pip install gatilegrid
+```
+
 ### Usage
 
 ```python
@@ -91,6 +97,6 @@ python setup.py test
 
 ```
 
-####CONTRIBUTORS:
+#### CONTRIBUTORS:
 
 - [Loïc Gasser](https://github.com/loicgasser)
