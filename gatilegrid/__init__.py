@@ -4,7 +4,21 @@ import math
 from past.builtins import xrange
 
 
-class GeoadminTileGrid:
+class _LV03Base:
+    # Default Swiss extent
+    # For simplicity sake we'll use (x, y) convention
+    # when it's really the (y, x) swiss coordinate system we're using
+    MINX = 420000.0
+    MAXX = 900000.0
+    MINY = 30000.0
+    MAXY = 350000.0
+
+    spatialReference = 21781
+
+    tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+
+
+class GeoadminTileGrid(_LV03Base):
 
     # Defines zooms 0 to 27
     RESOLUTIONS = [
@@ -39,19 +53,6 @@ class GeoadminTileGrid:
         0.1
     ]
 
-    # Default Swiss extent
-    # For simplicity sake we'll use (x, y) convention
-    # when it's really the (y, x) swiss coordinate system we're using
-    MINX = 420000.0
-    MAXX = 900000.0
-    MINY = 30000.0
-    MAXY = 350000.0
-
-    XSPAN = MAXX - MINX
-    YSPAN = MAXY - MINY
-
-    spatialReference = 21781
-
     def __init__(self, extent=None, tileSizePx=256.0):
         if extent:
             assert extent[0] < extent[2]
@@ -65,7 +66,8 @@ class GeoadminTileGrid:
             self.extent = [self.MINX, self.MINY, self.MAXX, self.MAXY]
         self.origin = [self.extent[0], self.extent[3]]  # Top left corner
         self.tileSizePx = tileSizePx  # In pixels
-        self.tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+        self.XSPAN = self.MAXX - self.MINX
+        self.YSPAN = self.MAXY - self.MINY
 
     def tileSize(self, zoom):
         "Returns the size (in meters) of a tile"
