@@ -1,10 +1,22 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from gatilegrid import GeoadminTileGrid
+from gatilegrid import getTileGrid, GeoadminTileGrid, GeoadminTileGridLV95
 
 
 class TestGeoadminTileGrid(unittest.TestCase):
+
+    def testgetTileGrid(self):
+        tileGrid = getTileGrid(21781)
+        self.assertIs(tileGrid, GeoadminTileGrid)
+        self.assertIsInstance(tileGrid(), GeoadminTileGrid)
+        tileGrid = getTileGrid(2056)
+        self.assertIs(tileGrid, GeoadminTileGridLV95)
+        self.assertIsInstance(tileGrid(), GeoadminTileGridLV95)
+
+    def testUnsupportedTileGrid(self):
+        with self.assertRaises(AssertionError):
+            getTileGrid(7008)
 
     def testTileGridWrongExtent(self):
         with self.assertRaises(AssertionError):
