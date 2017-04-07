@@ -15,14 +15,17 @@ $ pip install gatilegrid
 
 ### Usage
 
+Several tile grids are supported, namely 21781 and 2056. Here is an exemple using 21781.
+
+
 ```python
-from gatilegrid import GeoadminTileGrid
+from gatilegrid import getTileGrid
 
 zoom = 18
 tileCol = 6
 tileRow = 7
 
-gagrid = GeoadminTileGrid()
+gagrid = getTileGrid(21781)()
 # With extent constraint
 offset = 100000
 gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offset,
@@ -31,37 +34,37 @@ gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offs
 bounds = [xmin, ymin, xmax, ymax] = gagrid.tileBounds(zoom, tileCol, tileRow)
 print bounds
 print gagrid.tileAddressTemplate
->>>> [496800.0, 247600.0, 509600.0, 260400.0]
->>>> {zoom}/{tileCol}/{tileRow}
+>>> [496800.0, 247600.0, 509600.0, 260400.0]
+>>> {zoom}/{tileCol}/{tileRow}
 
 topLeftCorner = [xmin, ymax]
 tileAddress = [tileCol, tileRow] = gagrid.tileAddress(zoom, topLeftCorner)
 print tileAddress
->>>> [7, 6]
+>>> [7, 6]
 
 # It also works if the point is within the tile
 pointInTile = [topLeftCorner[0] + 200.0, topLeftCorner[1] - 200.0]
 print gagrid.tileAddress(zoom, pointInTile)
->>>> [7, 6]
+>>> [7, 6]
 
 # Resolution in meters
 print gagrid.getResolution(zoom)
->>>> 50.0
+>>> 50.0
 
 # Scale dpi dependent (defaults to 96)
 print gagrid.getScale(zoom, dpi=96.0)
->>>> 188976.0
+>>> 188976.0
 
 # Tile size in meters
 print gagrid.tileSize(zoom)
->>>> 12800.0
+>>> 12800.0
 
 # Number of tiles at zoom
 print gagrid.numberOfTilesAtZoom(zoom)
->>>> 950
+>>> 950
 # Extent dependent
 print gagridExtent.numberOfTilesAtZoom(zoom)
->>>> 253
+>>> 253
 
 # Generate tilesSpec
 counter = 0
@@ -74,8 +77,8 @@ for t in tilesSpecGenerator:
     counter += 1
     if counter == 2:
         break
->>>> ([420000.0, 286000.0, 484000.0, 350000.0], 16, 0, 0)
->>>> ([484000.0, 286000.0, 548000.0, 350000.0], 16, 1, 0)
+>>> ([420000.0, 286000.0, 484000.0, 350000.0], 16, 0, 0)
+>>> ([484000.0, 286000.0, 548000.0, 350000.0], 16, 1, 0)
 # Extent dependent
 counter = 0
 tilesSpecGeneratorExtent = gagridExtent.iterGrid(minZoom, maxZoom)
@@ -85,9 +88,59 @@ for t in tilesSpecGeneratorExtent:
     counter += 1
     if counter == 2:
         break
->>>> ([484000.0, 222000.0, 548000.0, 286000.0], 16, 1, 1)
->>>> ([548000.0, 222000.0, 612000.0, 286000.0], 16, 2, 1)
+>>> ([484000.0, 222000.0, 548000.0, 286000.0], 16, 1, 1)
+>>> ([548000.0, 222000.0, 612000.0, 286000.0], 16, 2, 1)
 
+```
+
+This module also provides a simple grid API for grid cells addressing.
+
+```python
+from gatilegrid import Grid
+
+extent = [485349.96, 75250.055, 833849.959, 295950.054]
+resolutionX = 100.0
+resolutionY = -100.0
+grid = Grid(extent, resolutionX, resolutionY)
+
+# We use singed resolution to define the origin.
+# Here the origin is at the top-left corner.
+print grid.origin
+>>> [485349.96, 295950.054]
+
+# The Grid class defines a series of useful properties
+print grid.cellArea
+>>> 10000.0
+print grid.nbCellsX
+>>> 3485
+print grid.nbCellsY
+>>> 2207
+print grid.isTopLeft
+>>> True
+print grid.isBottomRight
+>>> False
+
+[col, row] = grid.cellAddressFromPointCoordinate([500000, 100000])
+print col
+print row
+>>> 146
+>>> 1959
+
+# Get the extent of the cell using its address
+cellExtent = grid.cellExtent(col, row)
+print cellExtent
+>>> [499949.96, 99950.054, 500049.96, 100050.054]
+
+# Get an address range using an extent
+[minCol, minRow, maxCol, maxRow] = grid.getExtentAddress([500000, 100000, 550000, 150000])
+print minCol
+>>> 146
+print minRow
+>>> 1459
+print maxCol
+>>> 646
+print maxRow
+>>> 1959
 ```
 
 ### Tests
