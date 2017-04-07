@@ -57,8 +57,8 @@ class _LV03Base(_ResolutionsBase):
 class _LV95Base(_ResolutionsBase):
 
     MINX = 2420000.0
-    MAXX = 1030000.0
-    MINY = 2900000.0
+    MAXX = 2900000.0
+    MINY = 1030000.0
     MAXY = 1350000.0
 
     spatialReference = 2056
