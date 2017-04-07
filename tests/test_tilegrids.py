@@ -7,35 +7,21 @@ from gatilegrid import GeoadminTileGrid
 class TestGeoadminTileGrid(unittest.TestCase):
 
     def testTileGridWrongExtent(self):
-        try:
+        with self.assertRaises(AssertionError):
             GeoadminTileGrid(extent=[10.0, 10.0, 20.0, 20.0])
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('GeoadminTileGrid instance: extent assertion error \
-                too small not raised')
 
-        try:
+        with self.assertRaises(AssertionError):
             GeoadminTileGrid(extent=[430000.0, 40000.0, 420000.0, 340000.0])
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('GeoadminTileGrid instance: extent assertion error \
-                inconsistent not raised')
 
     def testTileSize(self):
         gagrid = GeoadminTileGrid()
         ts = gagrid.tileSize(20)
         self.assertEqual(ts, 2560.0)
-        try:
-            gagrid.tileSize(40)
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('tileSize: assertion error not raised')
-
         self.assertEqual(gagrid.tileAddressTemplate,
                          '{zoom}/{tileCol}/{tileRow}')
+
+        with self.assertRaises(AssertionError):
+            gagrid.tileSize(40)
 
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGrid()
@@ -45,12 +31,8 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tb[1], tbe[1])
         self.assertEqual(tb[2], tbe[2])
         self.assertEqual(tb[3], tbe[3])
-        try:
+        with self.assertRaises(AssertionError):
             gagrid.tileBounds(77, 5, 5)
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('tileBounds: assertion error not raised')
 
         ta = gagrid.tileAddress(0, [gagrid.MINX, gagrid.MAXY])
         self.assertEqual(ta[0], 0)
@@ -82,32 +64,14 @@ class TestGeoadminTileGrid(unittest.TestCase):
         row = tilesSpec[2][3]
         self.assertEqual(bounds, gagrid.tileBounds(z, col, row))
 
-        try:
-            for i in gagrid.iterGrid(13, 33):
-                print(i)
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('iterGrid: assertion error maxZoom \
-                            too big not raised')
+        with self.assertRaises(AssertionError):
+            next(gagrid.iterGrid(13, 33))
 
-        try:
-            for i in gagrid.iterGrid(-1, 11):
-                print(i)
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('iterGrid: assertion error minZoom \
-                            too small not raised')
+        with self.assertRaises(AssertionError):
+            next(gagrid.iterGrid(-1, 11))
 
-        try:
-            for i in gagrid.iterGrid(13, 11):
-                print(i)
-        except Exception as e:
-            self.assertIsInstance(e, AssertionError)
-        else:
-            raise Exception('iterGrid: assertion error maxZoom \
-                            bigger than minZoom not raised')
+        with self.assertRaises(AssertionError):
+            next(gagrid.iterGrid(13, 11))
 
     def testGetScale(self):
         gagrid = GeoadminTileGrid()
