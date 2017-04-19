@@ -38,6 +38,8 @@ class _ResolutionsBase:
         0.1
     ]
 
+    originCorner = 'top-left'
+
 
 class _LV03Base(_ResolutionsBase):
 
@@ -66,6 +68,46 @@ class _LV95Base(_ResolutionsBase):
     tileAddressTemplate = '{zoom}/{tileRow}/{tileCol}'
 
 
+class _MercatorBase:
+    RESOLUTIONS = [
+        156543.03392804097,
+        78271.51696402048,
+        39135.75848201024,
+        19567.87924100512,
+        9783.93962050256,
+        4891.96981025128,
+        2445.98490512564,
+        1222.99245256282,
+        611.49622628141,
+        305.748113140705,
+        152.8740565703525,
+        76.43702828517625,
+        38.21851414258813,
+        19.109257071294063,
+        9.554628535647032,
+        4.777314267823516,
+        2.388657133911758,
+        1.194328566955879,
+        0.5971642834779395,
+        0.29858214173896974,
+        0.14929107086948487,
+        0.07464553543474244,
+        0.03732276771737122,
+        0.01866138385868561
+    ]
+
+    MINX = -20037508.342789244
+    MAXX = 20037508.342789244
+    MINY = -20037508.342789244
+    MAXY = 20037508.342789244
+
+    spatialReference = 3857
+
+    tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+
+    originCorner = 'bottom-left'
+
+
 class _TileGrid(object):
 
     def __init__(self, extent=None, tileSizePx=256.0):
@@ -80,7 +122,10 @@ class _TileGrid(object):
             self.extent = extent
         else:
             self.extent = [self.MINX, self.MINY, self.MAXX, self.MAXY]
-        self.origin = [self.extent[0], self.extent[3]]  # Top left corner
+        if self.originCorner == 'bottom-left':
+            self.origin = [self.extent[0], self.extent[1]]
+        else:
+            self.origin = [self.extent[0], self.extent[3]]
         self.tileSizePx = tileSizePx  # In pixels
         self.XSPAN = self.MAXX - self.MINX
         self.YSPAN = self.MAXY - self.MINY
@@ -95,10 +140,16 @@ class _TileGrid(object):
         assert zoom in range(0, len(self.RESOLUTIONS))
         # 0,0 at top left: y axis down and x axis right
         tileSize = self.tileSize(zoom)
-        minX = self.MINX + (tileCol * tileSize)
-        minY = self.MAXY - ((tileRow + 1) * tileSize)
-        maxX = self.MINX + ((tileCol + 1) * tileSize)
-        maxY = self.MAXY - (tileRow * tileSize)
+        minX = self.MINX + tileCol * tileSize
+        maxX = self.MINX + (tileCol + 1) * tileSize
+        if self.originCorner == 'bottom-left':
+            minY = self.MINY + tileRow * tileSize
+        else:
+            minY = self.MAXY - (tileRow + 1) * tileSize
+        if self.originCorner == 'bottom-left':
+            maxY = self.MINY + (tileRow + 1) * tileSize
+        else:
+            maxY = self.MAXY - tileRow * tileSize
         return [minX, minY, maxX, maxY]
 
     def tileAddress(self, zoom, point):
@@ -111,7 +162,10 @@ class _TileGrid(object):
 
         tileS = self.tileSize(zoom)
         offsetX = x - self.MINX
-        offsetY = self.MAXY - y
+        if self.originCorner == 'bottom-left':
+            offsetY = y - self.MINX
+        else:
+            offsetY = self.MAXY - y
         col = offsetX / tileS
         row = offsetY / tileS
         # We are exactly on the edge of a tile and the extent
@@ -165,10 +219,16 @@ class _TileGrid(object):
     def getExtentAddress(self, zoom):
         minX = self.extent[0]
         maxY = self.extent[3]
-        [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
         maxX = self.extent[2]
         minY = self.extent[1]
-        [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
+        if self.originCorner == 'bottom-left':
+            [minCol, minRow] = self.tileAddress(zoom, [minX, minY])
+        else:
+            [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
+        if self.originCorner == 'bottom-left':
+            [maxCol, maxRow] = self.tileAddress(zoom, [maxX, maxY])
+        else:
+            [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
         return [minRow, minCol, maxRow, maxCol]
 
     @property
@@ -182,11 +242,11 @@ class _TileGrid(object):
         return self.extent[3] - self.extent[1]
 
 
-class GeoadminTileGrid(_LV03Base, _TileGrid):
+class GeoadminTileGridLV03(_LV03Base, _TileGrid):
 
     def __init__(self, extent=None, tileSizePx=256.0):
 
-        super(GeoadminTileGrid, self).__init__(
+        super(GeoadminTileGridLV03, self).__init__(
             extent=extent, tileSizePx=tileSizePx)
 
 
@@ -195,4 +255,12 @@ class GeoadminTileGridLV95(_LV95Base, _TileGrid):
     def __init__(self, extent=None, tileSizePx=256.0):
 
         super(GeoadminTileGridLV95, self).__init__(
+            extent=extent, tileSizePx=tileSizePx)
+
+
+class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
+
+    def __init__(self, extent=None, tileSizePx=256.0):
+
+        super(GlobalMercatorTileGrid, self).__init__(
             extent=extent, tileSizePx=tileSizePx)
