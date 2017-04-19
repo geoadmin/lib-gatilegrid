@@ -1,18 +1,23 @@
 # -*- coding: utf-8 -*-
 
+import math
 import unittest
-from gatilegrid import getTileGrid, GeoadminTileGrid, GeoadminTileGridLV95
+from gatilegrid import getTileGrid, GeoadminTileGridLV03
+from gatilegrid import GeoadminTileGridLV95, GlobalMercatorTileGrid
 
 
 class TestGeoadminTileGrid(unittest.TestCase):
 
     def testgetTileGrid(self):
         tileGrid = getTileGrid(21781)
-        self.assertIs(tileGrid, GeoadminTileGrid)
-        self.assertIsInstance(tileGrid(), GeoadminTileGrid)
+        self.assertIs(tileGrid, GeoadminTileGridLV03)
+        self.assertIsInstance(tileGrid(), GeoadminTileGridLV03)
         tileGrid = getTileGrid(2056)
         self.assertIs(tileGrid, GeoadminTileGridLV95)
         self.assertIsInstance(tileGrid(), GeoadminTileGridLV95)
+        tileGrid = getTileGrid(3857)
+        self.assertIs(tileGrid, GlobalMercatorTileGrid)
+        self.assertIsInstance(tileGrid(), GlobalMercatorTileGrid)
 
     def testUnsupportedTileGrid(self):
         with self.assertRaises(AssertionError):
@@ -20,13 +25,14 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
     def testTileGridWrongExtent(self):
         with self.assertRaises(AssertionError):
-            GeoadminTileGrid(extent=[10.0, 10.0, 20.0, 20.0])
+            GeoadminTileGridLV03(extent=[10.0, 10.0, 20.0, 20.0])
 
         with self.assertRaises(AssertionError):
-            GeoadminTileGrid(extent=[430000.0, 40000.0, 420000.0, 340000.0])
+            GeoadminTileGridLV03(
+                extent=[430000.0, 40000.0, 420000.0, 340000.0])
 
     def testTileSize(self):
-        gagrid = GeoadminTileGrid()
+        gagrid = GeoadminTileGridLV03()
         ts = gagrid.tileSize(20)
         self.assertEqual(ts, 2560.0)
         self.assertEqual(gagrid.tileAddressTemplate,
@@ -36,7 +42,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
             gagrid.tileSize(40)
 
     def testTileBoundsAndAddress(self):
-        gagrid = GeoadminTileGrid()
+        gagrid = GeoadminTileGridLV03()
         tbe = [548000.0, 196400.0, 573600.0, 222000.0]
         tb = gagrid.tileBounds(17, 5, 5)
         self.assertEqual(tb[0], tbe[0])
@@ -54,7 +60,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(ta[1], 5)
 
     def testIterGrid(self):
-        gagrid = GeoadminTileGrid()
+        gagrid = GeoadminTileGridLV03()
         gen = gagrid.iterGrid(0, 0)
         self.assertTrue(hasattr(gen, '__iter__'))
         tileSpec = [t for t in gen]
@@ -86,7 +92,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
             next(gagrid.iterGrid(13, 11))
 
     def testGetScale(self):
-        gagrid = GeoadminTileGrid()
+        gagrid = GeoadminTileGridLV03()
         s14 = gagrid.getScale(14)
         s28 = gagrid.getScale(28)
         self.assertGreater(s14, s28)
@@ -103,10 +109,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
     def testIterGridWithExtent(self):
         offset = 20000.0
-        gagridDefault = GeoadminTileGrid()
+        gagridDefault = GeoadminTileGridLV03()
         extent = [gagridDefault.MINX + offset, gagridDefault.MINY + offset,
                   gagridDefault.MAXX - offset, gagridDefault.MAXY - offset]
-        gagridExtent = GeoadminTileGrid(extent=extent)
+        gagridExtent = GeoadminTileGridLV03(extent=extent)
 
         self.assertGreater(gagridDefault.xSpan, gagridExtent.xSpan)
         self.assertGreater(gagridDefault.ySpan, gagridExtent.ySpan)
@@ -122,9 +128,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
             gagridExtent.numberOfTilesAtZoom(21)
         self.assertEqual(len(tilesSpecExtent), nbTiles)
 
-    def testNumberOfTiles(self):
+    def testNumberOfTilesLV03(self):
         zoom = 20
-        gagrid = GeoadminTileGrid()
+        gagrid = GeoadminTileGridLV03()
         [minRow, minCol, maxRow, maxCol] = gagrid.getExtentAddress(zoom)
         nb = gagrid.numberOfTilesAtZoom(zoom)
         nbx = gagrid.numberOfXTilesAtZoom(zoom)
@@ -169,3 +175,38 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, 375000)
         self.assertEqual(nb, nbx * nby)
         self.assertGreater(nbx, nby)
+
+    def testNumberOfTilesMercator(self):
+        grid = GlobalMercatorTileGrid()
+        zoom = 0
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 1)
+
+        zoom = 2
+        [minRow, minCol, maxRow, maxCol] = grid.getExtentAddress(zoom)
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertGreater(maxCol, minCol)
+        self.assertGreater(maxRow, minRow)
+        self.assertEqual(len([t for t in grid.iterGrid(zoom, zoom)]), nb)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 16)
+
+    def testMercatorGridBoundsAndAddress(self):
+        grid = GlobalMercatorTileGrid()
+        [z, x, y] = [8, 135, 91]
+        [xmin, ymin, xmax, ymax] = grid.tileBounds(z, x, y)
+        self.assertAlmostEqual(xmin, 1095801.2374962866)
+        self.assertAlmostEqual(ymin, -5792092.255337516)
+        self.assertAlmostEqual(xmax, 1252344.271424327)
+        self.assertAlmostEqual(ymax, -5635549.221409475)
+
+        center = [xmin + (xmax - xmin) / 2, ymin + (ymax - ymin) / 2]
+        [xa, ya] = grid.tileAddress(z, center)
+
+        self.assertEqual(xa, x)
+        self.assertEqual(ya, y)
