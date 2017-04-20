@@ -69,6 +69,8 @@ class _LV95Base(_ResolutionsBase):
 
 
 class _MercatorBase:
+    # origin at the top left a la Google
+    # OSGEO:41001 puts the origin at the bottom left
     RESOLUTIONS = [
         156543.03392804097,
         78271.51696402048,
@@ -105,7 +107,7 @@ class _MercatorBase:
 
     tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
 
-    originCorner = 'bottom-left'
+    originCorner = 'top-left'
 
 
 class _TileGrid(object):
@@ -122,10 +124,7 @@ class _TileGrid(object):
             self.extent = extent
         else:
             self.extent = [self.MINX, self.MINY, self.MAXX, self.MAXY]
-        if self.originCorner == 'bottom-left':
-            self.origin = [self.extent[0], self.extent[1]]
-        else:
-            self.origin = [self.extent[0], self.extent[3]]
+        self.origin = [self.extent[0], self.extent[3]]
         self.tileSizePx = tileSizePx  # In pixels
         self.XSPAN = self.MAXX - self.MINX
         self.YSPAN = self.MAXY - self.MINY
@@ -142,14 +141,8 @@ class _TileGrid(object):
         tileSize = self.tileSize(zoom)
         minX = self.MINX + tileCol * tileSize
         maxX = self.MINX + (tileCol + 1) * tileSize
-        if self.originCorner == 'bottom-left':
-            minY = self.MINY + tileRow * tileSize
-        else:
-            minY = self.MAXY - (tileRow + 1) * tileSize
-        if self.originCorner == 'bottom-left':
-            maxY = self.MINY + (tileRow + 1) * tileSize
-        else:
-            maxY = self.MAXY - tileRow * tileSize
+        minY = self.MAXY - (tileRow + 1) * tileSize
+        maxY = self.MAXY - tileRow * tileSize
         return [minX, minY, maxX, maxY]
 
     def tileAddress(self, zoom, point):
@@ -162,10 +155,7 @@ class _TileGrid(object):
 
         tileS = self.tileSize(zoom)
         offsetX = x - self.MINX
-        if self.originCorner == 'bottom-left':
-            offsetY = y - self.MINX
-        else:
-            offsetY = self.MAXY - y
+        offsetY = self.MAXY - y
         col = offsetX / tileS
         row = offsetY / tileS
         # We are exactly on the edge of a tile and the extent
@@ -221,14 +211,8 @@ class _TileGrid(object):
         maxY = self.extent[3]
         maxX = self.extent[2]
         minY = self.extent[1]
-        if self.originCorner == 'bottom-left':
-            [minCol, minRow] = self.tileAddress(zoom, [minX, minY])
-        else:
-            [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
-        if self.originCorner == 'bottom-left':
-            [maxCol, maxRow] = self.tileAddress(zoom, [maxX, maxY])
-        else:
-            [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
+        [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
+        [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
         return [minRow, minCol, maxRow, maxCol]
 
     @property
