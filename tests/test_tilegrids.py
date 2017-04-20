@@ -201,9 +201,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         [z, x, y] = [8, 135, 91]
         [xmin, ymin, xmax, ymax] = grid.tileBounds(z, x, y)
         self.assertAlmostEqual(xmin, 1095801.2374962866)
-        self.assertAlmostEqual(ymin, -5792092.255337516)
+        self.assertAlmostEqual(ymin, 5635549.221409475)
         self.assertAlmostEqual(xmax, 1252344.271424327)
-        self.assertAlmostEqual(ymax, -5635549.221409475)
+        self.assertAlmostEqual(ymax, 5792092.255337516)
 
         center = [xmin + (xmax - xmin) / 2, ymin + (ymax - ymin) / 2]
         [xa, ya] = grid.tileAddress(z, center)

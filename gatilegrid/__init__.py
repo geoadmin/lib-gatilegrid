@@ -4,7 +4,7 @@ from .grid import Grid
 
 
 def getTileGrid(srs):
-    assert srs in (21781, 2056, 4326, 3857), 'Unsupported tile grid'
+    assert srs in (21781, 2056, 3857), 'Unsupported tile grid'
     if srs == 21781:
         return GeoadminTileGridLV03
     elif srs == 2056:
