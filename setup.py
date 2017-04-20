@@ -2,8 +2,15 @@
 
 # HACK for `nose.collector` to work on python 2.7.3 and earlier
 import multiprocessing
-from setuptools import setup, find_packages
+import os
+from setuptools import setup
 
+
+try:
+    from pypandoc import convert
+    README = convert('README.md', 'rst')
+except ImportError:
+    README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
 
 
 setup(name='gatilegrid',
@@ -15,10 +22,11 @@ setup(name='gatilegrid',
       author_email='loicgasser4@gmail.com',
       license='MIT',
       url='https://github.com/geoadmin/gatilegrid',
-      packages=find_packages(exclude=['tests']),
+      packages=['gatilegrid'],
       package_dir={'gatilegrid': 'gatilegrid'},
       include_package_data=True,
       zip_safe=False,
+      long_description=README,
       test_suite='nose.collector',
       install_requires=['future'],
       )

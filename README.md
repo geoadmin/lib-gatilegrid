@@ -146,8 +146,21 @@ print maxRow
 ### Tests
 
 ```
+source env/bin/activate
 python setup.py test
 
+```
+
+### Upload module
+
+Make sure your libs are up to date.
+
+```
+pip install wheel twine setuptools --upgrade
+python setup.py sdist upload -r pypitest
+python setup.py sdist upload -r pypi
+python setup.py bdist_wheel upload -r pypitest
+python setup.py bdist_wheel upload -r pypi
 ```
 
 #### CONTRIBUTORS:
