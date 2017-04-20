@@ -7,8 +7,8 @@ from setuptools import setup, find_packages
 
 
 setup(name='gatilegrid',
-      version='0.0.7',
-      description='Geoadmin custom grid and tile grid API for web mapping applications',
+      version='0.0.8',
+      description='Popular tile grids and grids API for web mapping applications',
       classifiers=[],
       keywords='',
       author='Loic Gasser',
