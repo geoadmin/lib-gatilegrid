@@ -15,7 +15,8 @@ $ pip install gatilegrid
 
 ### Usage
 
-Several tile grids are supported, namely 21781, 2056 and 3857. Here is an exemple using 21781.
+Several tile grids are supported, namely 21781, 2056, 3857 and 4327. Here is an exemple using 21781.
+For 4327, an additional parameter is available (`tmsCompatible=True`).
 
 
 ```python
@@ -25,7 +26,8 @@ zoom = 18
 tileCol = 6
 tileRow = 7
 
-gagrid = getTileGrid(21781)()
+# Get and initialize the grid (top-left and bottom-left are availble)
+gagrid = getTileGrid(21781)(originCorner='top-left')
 # With extent constraint
 offset = 100000
 gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offset,
