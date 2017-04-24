@@ -38,8 +38,6 @@ class _ResolutionsBase:
         0.1
     ]
 
-    originCorner = 'top-left'
-
 
 class _LV03Base(_ResolutionsBase):
 
@@ -107,12 +105,35 @@ class _MercatorBase:
 
     tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
 
-    originCorner = 'top-left'
+
+class _GeodeticBase:
+    # in arc/pixel
+    MINX = -180.0  # lon
+    MAXX = 180.0
+    MINY = -90.0  # lat
+    MAXY = 90.0
+
+    spatialReference = 4326
+
+    tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+
+    def resolutions(self, tmsCompatible, tileSizePx):
+        if tmsCompatible:
+            self.resFact = 180.0 / tileSizePx  # Cesium terrain
+        else:
+            self.resFact = 360.0 / tileSizePx  # OpenLayers
+        self.RESOLUTIONS = [self.resFact / 2 ** z for z in range(0, 25)]
 
 
 class _TileGrid(object):
 
-    def __init__(self, extent=None, tileSizePx=256.0):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left',
+                 tmsCompatible=None):
+        assert originCorner in ('bottom-left', 'top-left')
+        self.originCorner = originCorner
+
+        if hasattr(self, 'resolutions') and tmsCompatible is not None:
+            self.resolutions(tmsCompatible, tileSizePx)
 
         if extent:
             assert extent[0] < extent[2]
@@ -124,7 +145,10 @@ class _TileGrid(object):
             self.extent = extent
         else:
             self.extent = [self.MINX, self.MINY, self.MAXX, self.MAXY]
-        self.origin = [self.extent[0], self.extent[3]]
+        if self.originCorner == 'bottom-left':
+            self.origin = [self.extent[0], self.extent[1]]
+        elif self.originCorner == 'top-left':
+            self.origin = [self.extent[0], self.extent[3]]
         self.tileSizePx = tileSizePx  # In pixels
         self.XSPAN = self.MAXX - self.MINX
         self.YSPAN = self.MAXY - self.MINY
@@ -141,8 +165,12 @@ class _TileGrid(object):
         tileSize = self.tileSize(zoom)
         minX = self.MINX + tileCol * tileSize
         maxX = self.MINX + (tileCol + 1) * tileSize
-        minY = self.MAXY - (tileRow + 1) * tileSize
-        maxY = self.MAXY - tileRow * tileSize
+        if self.originCorner == 'bottom-left':
+            minY = self.MINY + tileRow * tileSize
+            maxY = self.MINY + (tileRow + 1) * tileSize
+        elif self.originCorner == 'top-left':
+            minY = self.MAXY - (tileRow + 1) * tileSize
+            maxY = self.MAXY - tileRow * tileSize
         return [minX, minY, maxX, maxY]
 
     def tileAddress(self, zoom, point):
@@ -154,8 +182,11 @@ class _TileGrid(object):
         assert zoom in range(0, len(self.RESOLUTIONS))
 
         tileS = self.tileSize(zoom)
-        offsetX = x - self.MINX
-        offsetY = self.MAXY - y
+        offsetX = abs(x - self.MINX)
+        if self.originCorner == 'bottom-left':
+            offsetY = abs(y - self.MINY)
+        elif self.originCorner == 'top-left':
+            offsetY = abs(self.MAXY - y)
         col = offsetX / tileS
         row = offsetY / tileS
         # We are exactly on the edge of a tile and the extent
@@ -208,43 +239,61 @@ class _TileGrid(object):
 
     def getExtentAddress(self, zoom):
         minX = self.extent[0]
-        maxY = self.extent[3]
         maxX = self.extent[2]
-        minY = self.extent[1]
+        if self.originCorner == 'bottom-left':
+            minY = self.extent[3]
+            maxY = self.extent[1]
+        elif self.originCorner == 'top-left':
+            minY = self.extent[1]
+            maxY = self.extent[3]
         [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
         [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
         return [minRow, minCol, maxRow, maxCol]
 
     @property
     def xSpan(self):
-        "Returns the range in meters over x"
-        return self.extent[2] - self.extent[0]
+        "Returns the range in meters/decimal of arcs over x"
+        return abs(self.extent[2] - self.extent[0])
 
     @property
     def ySpan(self):
-        "Returns the range in meters over y"
-        return self.extent[3] - self.extent[1]
+        "Returns the range in meters/decimal of arcs over y"
+        return abs(self.extent[3] - self.extent[1])
 
 
 class GeoadminTileGridLV03(_LV03Base, _TileGrid):
 
-    def __init__(self, extent=None, tileSizePx=256.0):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left'):
 
         super(GeoadminTileGridLV03, self).__init__(
-            extent=extent, tileSizePx=tileSizePx)
+            extent=extent, tileSizePx=tileSizePx, originCorner=originCorner
+        )
 
 
 class GeoadminTileGridLV95(_LV95Base, _TileGrid):
 
-    def __init__(self, extent=None, tileSizePx=256.0):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left'):
 
         super(GeoadminTileGridLV95, self).__init__(
-            extent=extent, tileSizePx=tileSizePx)
+            extent=extent, tileSizePx=tileSizePx, originCorner=originCorner
+        )
 
 
 class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
 
-    def __init__(self, extent=None, tileSizePx=256.0):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left'):
 
         super(GlobalMercatorTileGrid, self).__init__(
-            extent=extent, tileSizePx=tileSizePx)
+            extent=extent, tileSizePx=tileSizePx, originCorner=originCorner
+        )
+
+
+class GlobalGeodeticTileGrid(_GeodeticBase, _TileGrid):
+
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left',
+                 tmsCompatible=True):
+
+        super(GlobalGeodeticTileGrid, self).__init__(
+            extent=extent, tileSizePx=tileSizePx, originCorner=originCorner,
+            tmsCompatible=tmsCompatible
+        )
