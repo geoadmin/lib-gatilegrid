@@ -15,8 +15,8 @@ $ pip install gatilegrid
 
 ### Usage
 
-Several tile grids are supported, namely 21781, 2056, 3857 and 4327. Here is an exemple using 21781.
-For 4327, an additional parameter is available (`tmsCompatible=True`).
+Several tile grids are supported, namely 21781, 2056, 3857 and 4326. Here is an exemple using 21781.
+For 4326, an additional parameter is available (`tmsCompatible=True`).
 
 
 ```python
