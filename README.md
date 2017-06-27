@@ -1,7 +1,7 @@
 gatilegrid
 ===========
 
-[![Build Status](https://travis-ci.org/geoadmin/gatilegrid.svg?branch=master)](https://travis-ci.org/geoadmin/gatilegrid)
+[![Build Status](https://travis-ci.org/geoadmin/lib-gatilegrid.svg?branch=master)](https://travis-ci.org/geoadmin/lib-gatilegrid)
 
 ## Geoadmin custom tile grid for web mapping applications
 
