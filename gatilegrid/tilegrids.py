@@ -231,6 +231,11 @@ class _TileGrid(object):
         "Return the image resolution at a given zoom level"
         return self.tileSize(zoom) / self.tileSizePx
 
+    def getZoom(self, resolution):
+        "Return the zoom level for a given resolution"
+        assert resolution in self.RESOLUTIONS
+        return self.RESOLUTIONS.index(resolution)
+
     def getScale(self, zoom, dpi=96.0):
         "Return the scale at a given zoom level \
         (1:x e.g. 1 map unit equal x unit in the real world)"
