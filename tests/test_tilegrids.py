@@ -48,6 +48,34 @@ class TestGeoadminTileGrid(unittest.TestCase):
         with self.assertRaises(AssertionError):
             gagrid.tileSize(40)
 
+    def testGetResolution(self):
+        gagrid = GeoadminTileGridLV95()
+        res = gagrid.getResolution(0)
+        self.assertEqual(res, 4000.0)
+        res = gagrid.getResolution(28)
+        self.assertEqual(res, 0.1)
+
+        with self.assertRaises(AssertionError):
+            gagrid.getResolution(-1)
+        with self.assertRaises(AssertionError):
+            gagrid.getResolution(29)
+
+    def testGetZoom(self):
+        gagrid = GeoadminTileGridLV95()
+        zoom = gagrid.getZoom(4000.0)
+        self.assertEqual(zoom, 0)
+        zoom = gagrid.getZoom(0.1)
+        self.assertEqual(zoom, 28)
+
+        with self.assertRaises(AssertionError):
+            gagrid.getZoom(4000.000001)
+        with self.assertRaises(AssertionError):
+            gagrid.getZoom(3999.999999)
+        with self.assertRaises(AssertionError):
+            gagrid.getZoom(0.1000001)
+        with self.assertRaises(AssertionError):
+            gagrid.getZoom(0.00000001)
+
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGridLV03()
         tbe = [548000.0, 196400.0, 573600.0, 222000.0]
