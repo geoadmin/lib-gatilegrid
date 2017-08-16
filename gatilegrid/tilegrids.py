@@ -51,7 +51,7 @@ class _LV03Base(_ResolutionsBase):
 
     spatialReference = 21781
 
-    tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+    tileAddressTemplate = '{zoom}/{tileRow}/{tileCol}'
 
 
 class _LV95Base(_ResolutionsBase):
@@ -63,7 +63,7 @@ class _LV95Base(_ResolutionsBase):
 
     spatialReference = 2056
 
-    tileAddressTemplate = '{zoom}/{tileRow}/{tileCol}'
+    tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
 
 
 class _MercatorBase:

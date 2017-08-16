@@ -43,7 +43,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         ts = gagrid.tileSize(20)
         self.assertEqual(ts, 2560.0)
         self.assertEqual(gagrid.tileAddressTemplate,
-                         '{zoom}/{tileCol}/{tileRow}')
+                         '{zoom}/{tileRow}/{tileCol}')
 
         with self.assertRaises(AssertionError):
             gagrid.tileSize(40)
