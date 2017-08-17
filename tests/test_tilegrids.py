@@ -76,6 +76,17 @@ class TestGeoadminTileGrid(unittest.TestCase):
         with self.assertRaises(AssertionError):
             gagrid.getZoom(0.00000001)
 
+    def testGetClosestZoom(self):
+        gagrid = GeoadminTileGridLV95()
+        zoom = gagrid.getClosestZoom(100000.5)
+        self.assertEqual(zoom, 0)
+        zoom = gagrid.getClosestZoom(2555.5)
+        self.assertEqual(zoom, 6)
+        zoom = gagrid.getClosestZoom(2500)
+        self.assertEqual(zoom, 6)
+        zoom = gagrid.getClosestZoom(0.09)
+        self.assertEqual(zoom, 28)
+
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGridLV03()
         tbe = [548000.0, 196400.0, 573600.0, 222000.0]

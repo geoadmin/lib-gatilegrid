@@ -236,6 +236,25 @@ class _TileGrid(object):
         assert resolution in self.RESOLUTIONS
         return self.RESOLUTIONS.index(resolution)
 
+    def getClosestZoom(self, resolution):
+        "Return the closest zoom level for a given resolution"
+        lo = 0
+        hi = len(self.RESOLUTIONS)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if resolution > self.RESOLUTIONS[mid]:
+                hi = mid
+            else:
+                lo = mid + 1
+        if lo == 0:
+            return lo
+        if hi == len(self.RESOLUTIONS):
+            return hi - 1
+        before = self.RESOLUTIONS[lo - 1]
+        if abs(self.RESOLUTIONS[lo] - resolution) < abs(before - resolution):
+            return lo
+        return lo - 1
+
     def getScale(self, zoom, dpi=96.0):
         "Return the scale at a given zoom level \
         (1:x e.g. 1 map unit equal x unit in the real world)"
