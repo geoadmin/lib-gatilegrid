@@ -14,7 +14,7 @@ except ImportError:
 
 
 setup(name='gatilegrid',
-      version='0.1.3',
+      version='0.1.4',
       description='Popular tile grids and grids API for web mapping applications',
       classifiers=[],
       keywords='',
