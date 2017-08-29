@@ -4,6 +4,9 @@ import math
 from past.builtins import xrange
 
 
+EPSG4326_METERS_PER_UNIT = math.pi * 6378137 / 180
+
+
 class _ResolutionsBase:
     # Defines zooms 0 to 27
     RESOLUTIONS = [
@@ -53,6 +56,10 @@ class _LV03Base(_ResolutionsBase):
 
     tileAddressTemplate = '{zoom}/{tileRow}/{tileCol}'
 
+    unit = 'meters'
+
+    metersPerUnit = 1
+
 
 class _LV95Base(_ResolutionsBase):
 
@@ -64,6 +71,10 @@ class _LV95Base(_ResolutionsBase):
     spatialReference = 2056
 
     tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+
+    unit = 'meters'
+
+    metersPerUnit = 1
 
 
 class _MercatorBase:
@@ -105,6 +116,10 @@ class _MercatorBase:
 
     tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
 
+    unit = 'meters'
+
+    metersPerUnit = 1
+
 
 class _GeodeticBase:
     # in arc/pixel
@@ -116,6 +131,10 @@ class _GeodeticBase:
     spatialReference = 4326
 
     tileAddressTemplate = '{zoom}/{tileCol}/{tileRow}'
+
+    unit = 'degrees'
+
+    metersPerUnit = EPSG4326_METERS_PER_UNIT
 
     def resolutions(self, tmsCompatible, tileSizePx):
         if tmsCompatible:
@@ -236,8 +255,13 @@ class _TileGrid(object):
         assert resolution in self.RESOLUTIONS
         return self.RESOLUTIONS.index(resolution)
 
-    def getClosestZoom(self, resolution):
+    def getClosestZoom(self, resolution, unit='meters'):
         "Return the closest zoom level for a given resolution"
+        assert unit in ('meters', 'degrees')
+        if unit == 'meters' and self.unit == 'degrees':
+            resolution = resolution / self.metersPerUnit
+        elif unit == 'degrees' and self.unit == 'meters':
+            resolution = resolution * EPSG4326_METERS_PER_UNIT
         lo = 0
         hi = len(self.RESOLUTIONS)
         while lo < hi:

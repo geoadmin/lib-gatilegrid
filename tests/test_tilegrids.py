@@ -90,6 +90,16 @@ class TestGeoadminTileGrid(unittest.TestCase):
         zoom = gagrid.getClosestZoom(0.09)
         self.assertEqual(zoom, 28)
         self.assertIsInstance(zoom, int)
+        # Test WGS84 degrees conversion
+        gagrid = GlobalGeodeticTileGrid()
+        # Input meters
+        zoom = gagrid.getClosestZoom(600)
+        self.assertEqual(zoom, 7)
+        zoom = gagrid.getClosestZoom(0.29)
+        self.assertEqual(zoom, 18)
+        # Input degrees
+        zoom = gagrid.getClosestZoom(0.021, unit='degrees')
+        self.assertEqual(zoom, 5)
 
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGridLV03()
