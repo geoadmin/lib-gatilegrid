@@ -21,6 +21,7 @@ For 4326, an additional parameter is available (`tmsCompatible=True`).
 
 ```python
 from gatilegrid import getTileGrid
+from gatilegrid import GeoadminTileGridLV03 as GeoadminTileGrid
 
 zoom = 18
 tileCol = 6
