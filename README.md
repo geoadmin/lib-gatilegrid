@@ -36,8 +36,8 @@ gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offs
 
 bounds = [xmin, ymin, xmax, ymax] = gagrid.tileBounds(zoom, tileCol, tileRow)
 print(bounds)
-print(gagrid.tileAddressTemplate)
 >>> [496800.0, 247600.0, 509600.0, 260400.0]
+print(gagrid.tileAddressTemplate)
 >>> {zoom}/{tileCol}/{tileRow}
 
 topLeftCorner = [xmin, ymax]
