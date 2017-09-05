@@ -70,26 +70,22 @@ print(gagridExtent.numberOfTilesAtZoom(zoom))
 >>> 253
 
 # Generate tilesSpec
-counter = 0
 minZoom = 16
 maxZoom = zoom
 tilesSpecGenerator = gagrid.iterGrid(minZoom, maxZoom)
-for t in tilesSpecGenerator:
+for i, t in enumerate(tilesSpecGenerator):
     (tileBounds, zoom, tileCol, tileRow) = t
     print(t)
-    counter += 1
-    if counter == 2:
+    if i == 1:
         break
 >>> ([420000.0, 286000.0, 484000.0, 350000.0], 16, 0, 0)
 >>> ([484000.0, 286000.0, 548000.0, 350000.0], 16, 1, 0)
 # Extent dependent
-counter = 0
 tilesSpecGeneratorExtent = gagridExtent.iterGrid(minZoom, maxZoom)
-for t in tilesSpecGeneratorExtent:
+for i, t in enumerate(tilesSpecGeneratorExtent):
     (tileBounds, zoom, tileCol, tileRow) = t
     print(t)
-    counter += 1
-    if counter == 2:
+    if i = 1:
         break
 >>> ([484000.0, 222000.0, 548000.0, 286000.0], 16, 1, 1)
 >>> ([548000.0, 222000.0, 612000.0, 286000.0], 16, 2, 1)
