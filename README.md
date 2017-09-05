@@ -35,38 +35,38 @@ gagridExtent = GeoadminTileGrid(extent=[gagrid.MINX + offset, gagrid.MINY + offs
                                         gagrid.MAXX - offset, gagrid.MAXY - offset])
 
 bounds = [xmin, ymin, xmax, ymax] = gagrid.tileBounds(zoom, tileCol, tileRow)
-print bounds
-print gagrid.tileAddressTemplate
+print(bounds)
+print(gagrid.tileAddressTemplate)
 >>> [496800.0, 247600.0, 509600.0, 260400.0]
 >>> {zoom}/{tileCol}/{tileRow}
 
 topLeftCorner = [xmin, ymax]
 tileAddress = [tileCol, tileRow] = gagrid.tileAddress(zoom, topLeftCorner)
-print tileAddress
+print(tileAddress)
 >>> [7, 6]
 
 # It also works if the point is within the tile
 pointInTile = [topLeftCorner[0] + 200.0, topLeftCorner[1] - 200.0]
-print gagrid.tileAddress(zoom, pointInTile)
+print(gagrid.tileAddress(zoom, pointInTile))
 >>> [7, 6]
 
 # Resolution in meters
-print gagrid.getResolution(zoom)
+print(gagrid.getResolution(zoom))
 >>> 50.0
 
 # Scale dpi dependent (defaults to 96)
-print gagrid.getScale(zoom, dpi=96.0)
+print(gagrid.getScale(zoom, dpi=96.0))
 >>> 188976.0
 
 # Tile size in meters
-print gagrid.tileSize(zoom)
+print(gagrid.tileSize(zoom))
 >>> 12800.0
 
 # Number of tiles at zoom
-print gagrid.numberOfTilesAtZoom(zoom)
+print(gagrid.numberOfTilesAtZoom(zoom))
 >>> 950
 # Extent dependent
-print gagridExtent.numberOfTilesAtZoom(zoom)
+print(gagridExtent.numberOfTilesAtZoom(zoom))
 >>> 253
 
 # Generate tilesSpec
@@ -76,7 +76,7 @@ maxZoom = zoom
 tilesSpecGenerator = gagrid.iterGrid(minZoom, maxZoom)
 for t in tilesSpecGenerator:
     (tileBounds, zoom, tileCol, tileRow) = t
-    print t
+    print(t)
     counter += 1
     if counter == 2:
         break
@@ -87,7 +87,7 @@ counter = 0
 tilesSpecGeneratorExtent = gagridExtent.iterGrid(minZoom, maxZoom)
 for t in tilesSpecGeneratorExtent:
     (tileBounds, zoom, tileCol, tileRow) = t
-    print t
+    print(t)
     counter += 1
     if counter == 2:
         break
@@ -108,41 +108,41 @@ grid = Grid(extent, resolutionX, resolutionY)
 
 # We use singed resolution to define the origin.
 # Here the origin is at the top-left corner.
-print grid.origin
+print(grid.origin)
 >>> [485349.96, 295950.054]
 
 # The Grid class defines a series of useful properties
-print grid.cellArea
+print(grid.cellArea)
 >>> 10000.0
-print grid.nbCellsX
+print(grid.nbCellsX)
 >>> 3485
-print grid.nbCellsY
+print(grid.nbCellsY)
 >>> 2207
-print grid.isTopLeft
+print(grid.isTopLeft)
 >>> True
-print grid.isBottomRight
+print(grid.isBottomRight)
 >>> False
 
 [col, row] = grid.cellAddressFromPointCoordinate([500000, 100000])
-print col
-print row
+print(col)
 >>> 146
+print(row)
 >>> 1959
 
 # Get the extent of the cell using its address
 cellExtent = grid.cellExtent(col, row)
-print cellExtent
+print(cellExtent)
 >>> [499949.96, 99950.054, 500049.96, 100050.054]
 
 # Get an address range using an extent
 [minCol, minRow, maxCol, maxRow] = grid.getExtentAddress([500000, 100000, 550000, 150000])
-print minCol
+print(minCol)
 >>> 146
-print minRow
+print(minRow)
 >>> 1459
-print maxCol
+print(maxCol)
 >>> 646
-print maxRow
+print(maxRow)
 >>> 1959
 ```
 
