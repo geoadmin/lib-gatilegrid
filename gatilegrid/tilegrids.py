@@ -279,11 +279,13 @@ class _TileGrid(object):
             return lo
         return lo - 1
 
-    def getScale(self, zoom, dpi=96.0):
-        "Return the scale at a given zoom level \
-        (1:x e.g. 1 map unit equal x unit in the real world)"
-        inchesPerMeters = 39.37
-        return self.getResolution(zoom) * inchesPerMeters * dpi
+    def getScale(self, zoom):
+        if self.unit == 'degrees':
+            resolution = self.getResolution(zoom) * EPSG4326_METERS_PER_UNIT
+        else:
+            resolution = self.getResolution(zoom)
+        stdRendPxSize = 0.00028
+        return resolution / stdRendPxSize
 
     def getExtentAddress(self, zoom):
         minX = self.extent[0]

@@ -156,16 +156,16 @@ class TestGeoadminTileGrid(unittest.TestCase):
         s14 = gagrid.getScale(14)
         s28 = gagrid.getScale(28)
         self.assertGreater(s14, s28)
-        self.assertEqual(round(s14), 2456688.0)
-        self.assertEqual(round(s28), 378.0)
+        self.assertEqual(round(s14), 2321429.0)
+        self.assertEqual(round(s28), 357.0)
 
     def testGetScaleLV95(self):
         gagrid = GeoadminTileGridLV95()
         s14 = gagrid.getScale(14)
         s28 = gagrid.getScale(28)
         self.assertGreater(s14, s28)
-        self.assertEqual(round(s14), 2456688.0)
-        self.assertEqual(round(s28), 378.0)
+        self.assertEqual(round(s14), 2321429.0)
+        self.assertEqual(round(s28), 357.0)
 
     def testIterGridWithExtent(self):
         offset = 20000.0
