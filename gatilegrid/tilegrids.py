@@ -241,6 +241,7 @@ class _TileGrid(object):
         ]
 
     def intersectsExtent(self, extent):
+        "Determine if an extent intersects this instance extent"
         return \
             self.extent[0] <= extent[2] and self.extent[2] >= extent[0] and \
             self.extent[1] <= extent[3] and self.extent[3] >= extent[1]
@@ -272,6 +273,18 @@ class _TileGrid(object):
         "Returns the total number of tile at a given zoom level"
         [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
         return (maxCol - minCol + 1) * (maxRow - minRow + 1)
+
+    def totalNumberOfTiles(self, minZoom=None, maxZoom=None):
+        "Return the total number of tiles for this instance extent"
+        nbTiles = 0
+        minZoom = minZoom or 0
+        if maxZoom:
+            maxZoom = maxZoom + 1
+        else:
+            maxZoom = len(self.RESOLUTIONS)
+        for zoom in xrange(minZoom, maxZoom):
+            nbTiles += self.numberOfTilesAtZoom(zoom)
+        return nbTiles
 
     def getResolution(self, zoom):
         "Return the image resolution at a given zoom level"
