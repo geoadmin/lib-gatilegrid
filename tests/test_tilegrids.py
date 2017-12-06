@@ -77,7 +77,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
             gagrid.getZoom(0.00000001)
 
     def testGetClosestZoom(self):
-        gagrid = GeoadminTileGridLV95()
+        gagrid = GeoadminTileGridLV95(useSwissExtent=False)
         zoom = gagrid.getClosestZoom(100000.5)
         self.assertEqual(zoom, 0)
         self.assertIsInstance(zoom, int)
@@ -91,7 +91,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(zoom, 28)
         self.assertIsInstance(zoom, int)
         # Test WGS84 degrees conversion
-        gagrid = GlobalGeodeticTileGrid()
+        gagrid = GlobalGeodeticTileGrid(useSwissExtent=False)
         # Input meters
         zoom = gagrid.getClosestZoom(600)
         self.assertEqual(zoom, 7)
@@ -237,7 +237,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertGreater(nbx, nby)
 
     def testNumberOfTilesMercator(self):
-        grid = GlobalMercatorTileGrid()
+        grid = GlobalMercatorTileGrid(useSwissExtent=False)
         zoom = 0
         nb = grid.numberOfTilesAtZoom(zoom)
         nbx = grid.numberOfXTilesAtZoom(zoom)
@@ -258,7 +258,8 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
     def testNumberOfTilesGeodetic(self):
         grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
-                                      tmsCompatible=False)
+                                      tmsCompatible=False,
+                                      useSwissExtent=False)
         zoom = 0
         nb = grid.numberOfTilesAtZoom(zoom)
         nbx = grid.numberOfXTilesAtZoom(zoom)
@@ -278,7 +279,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, 8)
 
         grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
-                                      tmsCompatible=True)
+                                      tmsCompatible=True, useSwissExtent=False)
         zoom = 0
         nb = grid.numberOfTilesAtZoom(zoom)
         nbx = grid.numberOfXTilesAtZoom(zoom)
@@ -286,8 +287,27 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, nbx * nby)
         self.assertEqual(nb, 2)
 
+    def testGeodeticGridSwissBounds(self):
+        grid = GlobalGeodeticTileGrid(useSwissExtent=True)
+        outsideCh = [2.2, 43.1, 2.3, 43.2]
+        withinCh = [6.7, 46.3, 6.8, 46.4]
+
+        self.assertFalse(grid.intersectsExtent(outsideCh))
+        self.assertTrue(grid.intersectsExtent(withinCh))
+        with self.assertRaises(AssertionError):
+            grid.tileAddress(5, [outsideCh[0], outsideCh[1]])
+        with self.assertRaises(AssertionError):
+            grid.tileAddress(5, [outsideCh[2], outsideCh[3]])
+        grid.tileAddress(5, [withinCh[0], withinCh[1]])
+        grid.tileAddress(5, [withinCh[2], withinCh[3]])
+
+        withinCh = [2.2, 43.1, 6.8, 46.4]
+        outsideCh = [2.2, 46.3, 2.3, 46.4]
+        self.assertTrue(grid.intersectsExtent(withinCh))
+        self.assertFalse(grid.intersectsExtent(outsideCh))
+
     def testMercatorGridBoundsAndAddress(self):
-        grid = GlobalMercatorTileGrid()
+        grid = GlobalMercatorTileGrid(useSwissExtent=False)
         [z, x, y] = [8, 135, 91]
         [xmin, ymin, xmax, ymax] = grid.tileBounds(z, x, y)
         self.assertAlmostEqual(xmin, 1095801.2374962866)
@@ -303,7 +323,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
     def testGeodeticGridBoundsAndAddress(self):
         grid = GlobalGeodeticTileGrid(originCorner='top-left',
-                                      tmsCompatible=True)
+                                      tmsCompatible=True, useSwissExtent=False)
         [z, x, y] = [8, 268, 60]
         [xmin, ymin, xmax, ymax] = grid.tileBounds(z, x, y)
         self.assertAlmostEqual(xmin, 8.4375)
@@ -319,7 +339,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         [z, x, y] = [8, 266, 193]
         grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
-                                      tmsCompatible=True)
+                                      tmsCompatible=True, useSwissExtent=False)
         [xmin, ymin, xmax, ymax] = grid.tileBounds(z, x, y)
         self.assertAlmostEqual(xmin, 7.03125)
         self.assertAlmostEqual(ymin, 45.703125)
