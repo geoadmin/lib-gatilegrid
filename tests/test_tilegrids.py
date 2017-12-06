@@ -212,6 +212,45 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, nbx * nby)
         self.assertGreater(nbx, nby)
 
+    def testTotalNumberOfTilesLV03(self):
+        zoom = 20
+        gagrid = GeoadminTileGridLV03()
+
+        [minRow, minCol, maxRow, maxCol] = gagrid.getExtentAddress(zoom)
+        nb20 = gagrid.numberOfTilesAtZoom(zoom)
+        nbx = gagrid.numberOfXTilesAtZoom(zoom)
+        nby = gagrid.numberOfYTilesAtZoom(zoom)
+        self.assertGreater(maxCol, maxRow)
+        self.assertEqual(len([t for t in gagrid.iterGrid(zoom, zoom)]), nb20)
+        self.assertEqual(nb20, 23500)
+        self.assertEqual(nb20, nbx * nby)
+        self.assertGreater(nbx, nby)
+
+        zoom = 21
+        [minRow, minCol, maxRow, maxCol] = gagrid.getExtentAddress(zoom)
+        nb21 = gagrid.numberOfTilesAtZoom(zoom)
+        nbx = gagrid.numberOfXTilesAtZoom(zoom)
+        nby = gagrid.numberOfYTilesAtZoom(zoom)
+        self.assertGreater(maxCol, maxRow)
+        self.assertEqual(len([t for t in gagrid.iterGrid(zoom, zoom)]), nb21)
+        self.assertEqual(nb21, 93750)
+        self.assertEqual(nb21, nbx * nby)
+        self.assertGreater(nbx, nby)
+
+        zoom = 22
+        [minRow, minCol, maxRow, maxCol] = gagrid.getExtentAddress(zoom)
+        nb22 = gagrid.numberOfTilesAtZoom(zoom)
+        nbx = gagrid.numberOfXTilesAtZoom(zoom)
+        nby = gagrid.numberOfYTilesAtZoom(zoom)
+        self.assertGreater(maxCol, maxRow)
+        self.assertEqual(len([t for t in gagrid.iterGrid(zoom, zoom)]), nb22)
+        self.assertEqual(nb22, 375000)
+        self.assertEqual(nb22, nbx * nby)
+        self.assertGreater(nbx, nby)
+
+        self.assertEqual(gagrid.totalNumberOfTiles(20, 22), nb20 + nb21 + nb22)
+        self.assertEqual(gagrid.totalNumberOfTiles(), 285721952)
+
     def testNumberOfTilesLV95(self):
         zoom = 20
         gagrid = GeoadminTileGridLV95()
