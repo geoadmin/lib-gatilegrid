@@ -297,13 +297,8 @@ class _TileGrid(object):
         assert resolution in self.RESOLUTIONS
         return self.RESOLUTIONS.index(resolution)
 
-    def getClosestZoom(self, resolution, unit='meters'):
-        """
-        Return the closest zoom level for a given resolution
-        Parameters:
-            resolution -- max. resolution
-            unit -- unit for output (default='meters')
-        """
+    def getZoomLevelRange(self, resolution, unit='meters'):
+        "Return lower and higher zoom level given a resolution"
         assert unit in ('meters', 'degrees')
         if unit == 'meters' and self.unit == 'degrees':
             resolution = resolution / self.metersPerUnit
@@ -317,6 +312,16 @@ class _TileGrid(object):
                 hi = mid
             else:
                 lo = mid + 1
+        return lo, hi
+
+    def getClosestZoom(self, resolution, unit='meters'):
+        """
+        Return the closest zoom level for a given resolution
+        Parameters:
+            resolution -- max. resolution
+            unit -- unit for output (default='meters')
+        """
+        lo, hi = self.getZoomLevelRange(resolution, unit)
         if lo == 0:
             return lo
         if hi == len(self.RESOLUTIONS):
@@ -333,19 +338,7 @@ class _TileGrid(object):
             resolution -- max. resolution
             unit -- unit for output (default='meters')
         """
-        assert unit in ('meters', 'degrees')
-        if unit == 'meters' and self.unit == 'degrees':
-            resolution = resolution / self.metersPerUnit
-        elif unit == 'degrees' and self.unit == 'meters':
-            resolution = resolution * EPSG4326_METERS_PER_UNIT
-        lo = 0
-        hi = len(self.RESOLUTIONS)
-        while lo < hi:
-            mid = (lo + hi) // 2
-            if resolution > self.RESOLUTIONS[mid]:
-                hi = mid
-            else:
-                lo = mid + 1
+        lo, hi = self.getZoomLevelRange(resolution, unit)
         if lo == 0:
             return lo
         if hi == len(self.RESOLUTIONS):
