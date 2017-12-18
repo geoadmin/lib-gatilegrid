@@ -101,6 +101,33 @@ class TestGeoadminTileGrid(unittest.TestCase):
         zoom = gagrid.getClosestZoom(0.021, unit='degrees')
         self.assertEqual(zoom, 5)
 
+    def testGetCeilingZoom(self):
+        gagrid = GeoadminTileGridLV95(useSwissExtent=False)
+        zoom = gagrid.getCeilingZoom(100000.5)
+        self.assertEqual(zoom, 0)
+        self.assertIsInstance(zoom, int)
+        zoom = gagrid.getCeilingZoom(2555.5)
+        self.assertEqual(zoom, 5)
+        self.assertIsInstance(zoom, int)
+        zoom = gagrid.getCeilingZoom(2500)
+        self.assertEqual(zoom, 6)
+        self.assertIsInstance(zoom, int)
+        zoom = gagrid.getCeilingZoom(0.09)
+        self.assertEqual(zoom, 28)
+        self.assertIsInstance(zoom, int)
+        # Test WGS84 degrees conversion
+        gagrid = GlobalGeodeticTileGrid(useSwissExtent=False)
+        # Input meters
+        zoom = gagrid.getCeilingZoom(600)
+        self.assertEqual(zoom, 7)
+        zoom = gagrid.getCeilingZoom(310)
+        self.assertEqual(zoom, 7)
+        zoom = gagrid.getCeilingZoom(0.29)
+        self.assertEqual(zoom, 18)
+        # Input degrees
+        zoom = gagrid.getCeilingZoom(0.021, unit='degrees')
+        self.assertEqual(zoom, 5)
+
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGridLV03()
         tbe = [548000.0, 196400.0, 573600.0, 222000.0]

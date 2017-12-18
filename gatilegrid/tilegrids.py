@@ -298,7 +298,12 @@ class _TileGrid(object):
         return self.RESOLUTIONS.index(resolution)
 
     def getClosestZoom(self, resolution, unit='meters'):
-        "Return the closest zoom level for a given resolution"
+        """
+        Return the closest zoom level for a given resolution
+        Parameters:
+            resolution -- max. resolution
+            unit -- unit for output (default='meters')
+        """
         assert unit in ('meters', 'degrees')
         if unit == 'meters' and self.unit == 'degrees':
             resolution = resolution / self.metersPerUnit
@@ -319,6 +324,32 @@ class _TileGrid(object):
         before = self.RESOLUTIONS[lo - 1]
         if abs(self.RESOLUTIONS[lo] - resolution) < abs(before - resolution):
             return lo
+        return lo - 1
+
+    def getCeilingZoom(self, resolution, unit='meters'):
+        """
+        Return the closest zoom level for a given resolution
+        Parameters:
+            resolution -- max. resolution
+            unit -- unit for output (default='meters')
+        """
+        assert unit in ('meters', 'degrees')
+        if unit == 'meters' and self.unit == 'degrees':
+            resolution = resolution / self.metersPerUnit
+        elif unit == 'degrees' and self.unit == 'meters':
+            resolution = resolution * EPSG4326_METERS_PER_UNIT
+        lo = 0
+        hi = len(self.RESOLUTIONS)
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if resolution > self.RESOLUTIONS[mid]:
+                hi = mid
+            else:
+                lo = mid + 1
+        if lo == 0:
+            return lo
+        if hi == len(self.RESOLUTIONS):
+            return hi - 1
         return lo - 1
 
     def getScale(self, zoom):
