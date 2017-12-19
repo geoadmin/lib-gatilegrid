@@ -297,7 +297,7 @@ class _TileGrid(object):
         assert resolution in self.RESOLUTIONS
         return self.RESOLUTIONS.index(resolution)
 
-    def getZoomLevelRange(self, resolution, unit='meters'):
+    def _getZoomLevelRange(self, resolution, unit='meters'):
         "Return lower and higher zoom level given a resolution"
         assert unit in ('meters', 'degrees')
         if unit == 'meters' and self.unit == 'degrees':
@@ -321,7 +321,7 @@ class _TileGrid(object):
             resolution -- max. resolution
             unit -- unit for output (default='meters')
         """
-        lo, hi = self.getZoomLevelRange(resolution, unit)
+        lo, hi = self._getZoomLevelRange(resolution, unit)
         if lo == 0:
             return lo
         if hi == len(self.RESOLUTIONS):
@@ -338,7 +338,7 @@ class _TileGrid(object):
             resolution -- max. resolution
             unit -- unit for output (default='meters')
         """
-        lo, hi = self.getZoomLevelRange(resolution, unit)
+        lo, hi = self._getZoomLevelRange(resolution, unit)
         if lo == 0:
             return lo
         if hi == len(self.RESOLUTIONS):
