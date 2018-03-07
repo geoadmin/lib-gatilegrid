@@ -323,6 +323,69 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, 16)
 
     def testNumberOfTilesGeodetic(self):
+        grid = GlobalGeodeticTileGrid(originCorner='top-left',
+                                      tmsCompatible=False,
+                                      useSwissExtent=False)
+        zoom = 0
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 1)
+
+        zoom = 1
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 2)
+
+        zoom = 2
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 8)
+
+        zoom = 3
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 32)
+
+        grid = GlobalGeodeticTileGrid(originCorner='top-left',
+                                      tmsCompatible=True,
+                                      useSwissExtent=False)
+
+        zoom = 0
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 2)
+
+        zoom = 1
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 8)
+
+        zoom = 2
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 32)
+
+        zoom = 3
+        nb = grid.numberOfTilesAtZoom(zoom)
+        nbx = grid.numberOfXTilesAtZoom(zoom)
+        nby = grid.numberOfYTilesAtZoom(zoom)
+        self.assertEqual(nb, nbx * nby)
+        self.assertEqual(nb, 128)
+
         grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
                                       tmsCompatible=False,
                                       useSwissExtent=False)
@@ -436,3 +499,17 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         self.assertEqual(xa, x)
         self.assertEqual(ya, y)
+
+    def testGetParentTilesGlobalGeodetic(self):
+        grid = GlobalGeodeticTileGrid(
+            originCorner='top-left',
+            tmsCompatible=False,
+            useSwissExtent=False)
+        nb = grid.numberOfTilesAtZoom(1)
+        self.assertEqual(nb, 2)
+        z, x, y = [1, 1, 0]
+        tileAddresses = grid.getParentTiles(z, x, y, 0)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 0)
+        self.assertEqual(tileAddresses[0][1], 0)
+        self.assertEqual(tileAddresses[0][2], 0)

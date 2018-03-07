@@ -204,6 +204,7 @@ class _TileGrid(object):
     def tileBounds(self, zoom, tileCol, tileRow):
         "Returns the bounds of a tile in LV03 (EPSG:21781)"
         assert zoom in range(0, len(self.RESOLUTIONS))
+
         # 0,0 at top left: y axis down and x axis right
         tileSize = self.tileSize(zoom)
         minX = self.MINX + tileCol * tileSize
@@ -350,21 +351,54 @@ class _TileGrid(object):
             resolution = self.getResolution(zoom) * EPSG4326_METERS_PER_UNIT
         else:
             resolution = self.getResolution(zoom)
+        # Standard pixel size as defined by OGC standards
         stdRendPxSize = 0.00028
         return resolution / stdRendPxSize
 
-    def getExtentAddress(self, zoom):
-        minX = self.extent[0]
-        maxX = self.extent[2]
+    def getExtentAddress(self, zoom, extent=None):
+        """
+        Return the bounding addresses ([minRow, minCol, maxRow, maxCol] based
+        on the instance's extent or a user defined extent,
+        Parameters:
+            zoom -- the zoom for which we want the bounding addresses
+            extent (optional) -- the extent ([minX, minY, maxX, maxY])
+                                 defaults to the instance extent
+        """
+        if extent:
+            bbox = extent
+        else:
+            bbox = self.extent
+        minX = bbox[0]
+        maxX = bbox[2]
         if self.originCorner == 'bottom-left':
-            minY = self.extent[3]
-            maxY = self.extent[1]
+            minY = bbox[3]
+            maxY = bbox[1]
         elif self.originCorner == 'top-left':
-            minY = self.extent[1]
-            maxY = self.extent[3]
+            minY = bbox[1]
+            maxY = bbox[3]
         [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
         [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
         return [minRow, minCol, maxRow, maxCol]
+
+    def getParentTiles(self, zoom, col, row, zoomParent):
+        """
+        Return the parent tile(s) for an irregular (not following quadindex)
+        and regular tiling scheme
+        Parameters:
+            zoom -- the zoom level a the child tile
+            row -- the row of the child tile
+            col -- the col of the child tile
+            zoomParent -- the target zoom of the parent tile
+        """
+        assert zoomParent <= zoom
+        extent = self.tileBounds(zoom, col, row)
+        minRow, minCol, maxRow, maxCol = self.getExtentAddress(
+            zoomParent, extent=extent)
+        addresses = []
+        for c in range(minCol, maxCol + 1):
+            for r in range(minRow, maxRow + 1):
+                addresses.append([r, c, zoomParent])
+        return addresses
 
     @property
     def xSpan(self):
