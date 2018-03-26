@@ -429,6 +429,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertTrue(grid.intersectsExtent(withinCh))
         self.assertFalse(grid.intersectsExtent(outsideCh))
 
+        outsideWorld = [-900, -300, 900, 300]
+        with self.assertRaises(AssertionError):
+            grid.tileAddress(5, [outsideWorld[0], outsideWorld[1]])
+
     def testMercatorGridSwissBounds(self):
         grid = GlobalMercatorTileGrid(useSwissExtent=True)
         outsideCh = [502215, 5084416, 512215, 5184416]
@@ -441,6 +445,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
         outsideCh = [582215, 5084416, 592215, 5184416]
         self.assertTrue(grid.intersectsExtent(withinCh))
         self.assertFalse(grid.intersectsExtent(outsideCh))
+
+        outsideWorld = [-90000000000, -30000000000, 90000000000, 30000000000]
+        with self.assertRaises(AssertionError):
+            grid.tileAddress(5, [outsideWorld[0], outsideWorld[1]])
 
     def testMercatorGridBoundsAndAddress(self):
         grid = GlobalMercatorTileGrid(useSwissExtent=False)
