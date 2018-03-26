@@ -355,14 +355,20 @@ class _TileGrid(object):
         stdRendPxSize = 0.00028
         return resolution / stdRendPxSize
 
-    def getExtentAddress(self, zoom, extent=None):
+    def getExtentAddress(self, zoom, extent=None, contained=False):
         """
         Return the bounding addresses ([minRow, minCol, maxRow, maxCol] based
-        on the instance's extent or a user defined extent,
+        on the instance's extent or a user defined extent. Generic method
+        that works with regular and irregular pyramids.
         Parameters:
             zoom -- the zoom for which we want the bounding addresses
             extent (optional) -- the extent ([minX, minY, maxX, maxY])
                                  defaults to the instance extent
+            contained (optional) -- get only tile addresses that contain
+                                    a coordinate of the extent. For instance if
+                                    the extent only intersects a tile border,
+                                    if this option is set to True, this tile
+                                    will be ignored. defaults to False
         """
         if extent:
             bbox = extent
@@ -378,6 +384,19 @@ class _TileGrid(object):
             maxY = bbox[3]
         [minCol, minRow] = self.tileAddress(zoom, [minX, maxY])
         [maxCol, maxRow] = self.tileAddress(zoom, [maxX, minY])
+
+        if contained and minCol != maxCol or minRow != maxRow:
+            parentBoundsMin = self.tileBounds(zoom, minCol, minRow)
+            if self.originCorner == 'bottom-left':
+                if parentBoundsMin[2] == maxX:
+                    maxCol -= 1
+                if parentBoundsMin[3] == minY:
+                    maxRow -= 1
+            elif self.originCorner == 'top-left':
+                if parentBoundsMin[2] == maxX:
+                    maxCol -= 1
+                if parentBoundsMin[1] == minY:
+                    maxRow -= 1
         return [minRow, minCol, maxRow, maxCol]
 
     def getParentTiles(self, zoom, col, row, zoomParent):
@@ -393,11 +412,11 @@ class _TileGrid(object):
         assert zoomParent <= zoom
         extent = self.tileBounds(zoom, col, row)
         minRow, minCol, maxRow, maxCol = self.getExtentAddress(
-            zoomParent, extent=extent)
+            zoomParent, extent=extent, contained=True)
         addresses = []
         for c in range(minCol, maxCol + 1):
             for r in range(minRow, maxRow + 1):
-                addresses.append([r, c, zoomParent])
+                addresses.append([zoomParent, r, c])
         return addresses
 
     @property
