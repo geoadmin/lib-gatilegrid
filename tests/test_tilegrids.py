@@ -619,6 +619,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertGreaterEqual(parentExtent[2], childExtent[0])
         self.assertGreaterEqual(parentExtent[3], childExtent[1])
 
+        # Check that the tile intersects 4 parent tiles
+        z, x, y = [25, 700, 580]
+        self.assertEqual(len(grid.getParentTiles(z, x, y, 24)), 4)
+
     def testGetParentTilesLV03(self):
         grid = GeoadminTileGridLV03()
 
@@ -644,3 +648,7 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertLessEqual(parentExtent[1], childExtent[3])
         self.assertGreaterEqual(parentExtent[2], childExtent[0])
         self.assertGreaterEqual(parentExtent[3], childExtent[1])
+
+        # Check that the tile intersects 4 parent tiles
+        z, x, y = [25, 700, 580]
+        self.assertEqual(len(grid.getParentTiles(z, x, y, 24)), 4)
