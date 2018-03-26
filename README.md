@@ -74,6 +74,14 @@ print(gagrid.numberOfTilesAtZoom(zoom))
 print(gagridExtent.numberOfTilesAtZoom(zoom))
 >>> 253
 
+# Get the closest zoom for a given resolution
+print(gagrid.getClosestZoom(245))
+>>> 16
+
+# Get the ceiling zoom for a given resolution
+print(gagrid.getCeilingZoom(245))
+>>> 17
+
 # Generate tilesSpec
 minZoom = 16
 maxZoom = zoom

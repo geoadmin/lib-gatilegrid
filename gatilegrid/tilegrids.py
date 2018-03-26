@@ -336,17 +336,19 @@ class _TileGrid(object):
 
     def getCeilingZoom(self, resolution, unit='meters'):
         """
-        Return the closest zoom level for a given resolution
+        Return the maximized zoom level for a given resolution
         Parameters:
             resolution -- max. resolution
             unit -- unit for output (default='meters')
         """
+        if resolution in self.RESOLUTIONS:
+            return self.getZoom(resolution)
         lo, hi = self._getZoomLevelRange(resolution, unit)
-        if lo == 0:
+        if lo == 0 or lo == hi:
             return lo
         if hi == len(self.RESOLUTIONS):
             return hi - 1
-        return lo - 1
+        return lo + 1
 
     def getScale(self, zoom):
         """Returns the scale at a given zoom level"""
