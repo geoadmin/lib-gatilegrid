@@ -221,8 +221,8 @@ class _TileGrid(object):
         "Returns a tile address based on a zoom level and \
         a point in the tile"
         [x, y] = point
-        assert x <= self.extent[2] and x >= self.extent[0]
-        assert y <= self.extent[3] and y >= self.extent[1]
+        assert x <= self.MAXX and x >= self.MINX
+        assert y <= self.MAXY and y >= self.MINY
         assert zoom in range(0, len(self.RESOLUTIONS))
 
         tileS = self.tileSize(zoom)

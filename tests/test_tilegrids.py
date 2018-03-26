@@ -423,12 +423,6 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         self.assertFalse(grid.intersectsExtent(outsideCh))
         self.assertTrue(grid.intersectsExtent(withinCh))
-        with self.assertRaises(AssertionError):
-            grid.tileAddress(5, [outsideCh[0], outsideCh[1]])
-        with self.assertRaises(AssertionError):
-            grid.tileAddress(5, [outsideCh[2], outsideCh[3]])
-        grid.tileAddress(5, [withinCh[0], withinCh[1]])
-        grid.tileAddress(5, [withinCh[2], withinCh[3]])
 
         withinCh = [2.2, 43.1, 6.8, 46.4]
         outsideCh = [2.2, 46.3, 2.3, 46.4]
@@ -442,12 +436,6 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         self.assertFalse(grid.intersectsExtent(outsideCh))
         self.assertTrue(grid.intersectsExtent(withinCh))
-        with self.assertRaises(AssertionError):
-            grid.tileAddress(5, [outsideCh[0], outsideCh[1]])
-        with self.assertRaises(AssertionError):
-            grid.tileAddress(5, [outsideCh[2], outsideCh[3]])
-        grid.tileAddress(5, [withinCh[0], withinCh[1]])
-        grid.tileAddress(5, [withinCh[2], withinCh[3]])
 
         withinCh = [502215, 5084416, 592215, 5884416]
         outsideCh = [582215, 5084416, 592215, 5184416]
@@ -510,6 +498,28 @@ class TestGeoadminTileGrid(unittest.TestCase):
 
         nb = grid.numberOfTilesAtZoom(1)
         self.assertEqual(nb, 2)
+        z, x, y = [1, 1, 0]
+        tileAddresses = grid.getParentTiles(z, x, y, 0)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 0)
+        self.assertEqual(tileAddresses[0][1], 0)
+        self.assertEqual(tileAddresses[0][2], 0)
+
+        z, x, y = [3, 1, 1]
+        tileAddresses = grid.getParentTiles(z, x, y, 2)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 2)
+        self.assertEqual(tileAddresses[0][1], 0)
+        self.assertEqual(tileAddresses[0][2], 0)
+
+    def testGetParentTilesGlobalGeodeticTopLeftUseSwiss(self):
+        grid = GlobalGeodeticTileGrid(
+            originCorner='top-left',
+            tmsCompatible=False,
+            useSwissExtent=True)
+
+        nb = grid.numberOfTilesAtZoom(1)
+        self.assertEqual(nb, 1)
         z, x, y = [1, 1, 0]
         tileAddresses = grid.getParentTiles(z, x, y, 0)
         self.assertEqual(len(tileAddresses), 1)
