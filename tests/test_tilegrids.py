@@ -512,6 +512,13 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][1], 0)
         self.assertEqual(tileAddresses[0][2], 0)
 
+        z, x, y = [3, 2, 2]
+        tileAddresses = grid.getParentTiles(z, x, y, 2)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 2)
+        self.assertEqual(tileAddresses[0][1], 1)
+        self.assertEqual(tileAddresses[0][2], 1)
+
     def testGetParentTilesGlobalGeodeticTopLeftUseSwiss(self):
         grid = GlobalGeodeticTileGrid(
             originCorner='top-left',
@@ -534,6 +541,13 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][1], 0)
         self.assertEqual(tileAddresses[0][2], 0)
 
+        z, x, y = [3, 2, 2]
+        tileAddresses = grid.getParentTiles(z, x, y, 2)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 2)
+        self.assertEqual(tileAddresses[0][1], 1)
+        self.assertEqual(tileAddresses[0][2], 1)
+
     def testGetParentTilesGlobalGeodeticBottomLeft(self):
         grid = GlobalGeodeticTileGrid(
             originCorner='bottom-left',
@@ -555,3 +569,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][0], 2)
         self.assertEqual(tileAddresses[0][1], 0)
         self.assertEqual(tileAddresses[0][2], 0)
+
+        z, x, y = [3, 2, 2]
+        tileAddresses = grid.getParentTiles(z, x, y, 2)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 2)
+        self.assertEqual(tileAddresses[0][1], 1)
+        self.assertEqual(tileAddresses[0][2], 1)
