@@ -576,3 +576,55 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][0], 2)
         self.assertEqual(tileAddresses[0][1], 1)
         self.assertEqual(tileAddresses[0][2], 1)
+
+    def testGetParentTilesLV95(self):
+        grid = GeoadminTileGridLV95()
+
+        z, x, y = [16, 2, 2]
+        tileAddresses = grid.getParentTiles(z, x, y, 0)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 0)
+        self.assertEqual(tileAddresses[0][1], 0)
+        self.assertEqual(tileAddresses[0][2], 0)
+
+        tileAddresses = grid.getParentTiles(z, x, y, 15)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 15)
+        self.assertEqual(tileAddresses[0][1], 1)
+        self.assertEqual(tileAddresses[0][2], 1)
+
+        # Check that the tile extent intersects the parent tile
+        childExtent = grid.tileBounds(z, x, y)
+        parentExtent = grid.tileBounds(tileAddresses[0][0],
+                                       tileAddresses[0][1],
+                                       tileAddresses[0][2])
+        self.assertLessEqual(parentExtent[0], childExtent[2])
+        self.assertLessEqual(parentExtent[1], childExtent[3])
+        self.assertGreaterEqual(parentExtent[2], childExtent[0])
+        self.assertGreaterEqual(parentExtent[3], childExtent[1])
+
+    def testGetParentTilesLV03(self):
+        grid = GeoadminTileGridLV03()
+
+        z, x, y = [16, 2, 2]
+        tileAddresses = grid.getParentTiles(z, x, y, 0)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 0)
+        self.assertEqual(tileAddresses[0][1], 0)
+        self.assertEqual(tileAddresses[0][2], 0)
+
+        tileAddresses = grid.getParentTiles(z, x, y, 15)
+        self.assertEqual(len(tileAddresses), 1)
+        self.assertEqual(tileAddresses[0][0], 15)
+        self.assertEqual(tileAddresses[0][1], 1)
+        self.assertEqual(tileAddresses[0][2], 1)
+
+        # Check that the tile extent intersects the parent tile
+        childExtent = grid.tileBounds(z, x, y)
+        parentExtent = grid.tileBounds(tileAddresses[0][0],
+                                       tileAddresses[0][1],
+                                       tileAddresses[0][2])
+        self.assertLessEqual(parentExtent[0], childExtent[2])
+        self.assertLessEqual(parentExtent[1], childExtent[3])
+        self.assertGreaterEqual(parentExtent[2], childExtent[0])
+        self.assertGreaterEqual(parentExtent[3], childExtent[1])
