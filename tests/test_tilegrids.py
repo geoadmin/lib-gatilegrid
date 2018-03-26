@@ -84,12 +84,16 @@ class TestGeoadminTileGrid(unittest.TestCase):
         zoom = gagrid.getClosestZoom(2555.5)
         self.assertEqual(zoom, 6)
         self.assertIsInstance(zoom, int)
+        zoom = gagrid.getClosestZoom(2455.5)
+        self.assertEqual(zoom, 6)
+        self.assertIsInstance(zoom, int)
         zoom = gagrid.getClosestZoom(2500)
         self.assertEqual(zoom, 6)
         self.assertIsInstance(zoom, int)
         zoom = gagrid.getClosestZoom(0.09)
         self.assertEqual(zoom, 28)
         self.assertIsInstance(zoom, int)
+
         # Test WGS84 degrees conversion
         gagrid = GlobalGeodeticTileGrid(useSwissExtent=False)
         # Input meters
@@ -107,26 +111,30 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(zoom, 0)
         self.assertIsInstance(zoom, int)
         zoom = gagrid.getCeilingZoom(2555.5)
-        self.assertEqual(zoom, 5)
+        self.assertEqual(zoom, 6)
+        self.assertIsInstance(zoom, int)
+        zoom = gagrid.getCeilingZoom(2455.5)
+        self.assertEqual(zoom, 7)
         self.assertIsInstance(zoom, int)
         zoom = gagrid.getCeilingZoom(2500)
         self.assertEqual(zoom, 6)
         self.assertIsInstance(zoom, int)
         zoom = gagrid.getCeilingZoom(0.09)
-        self.assertEqual(zoom, 28)
+        self.assertEqual(zoom, 29)
         self.assertIsInstance(zoom, int)
+
         # Test WGS84 degrees conversion
         gagrid = GlobalGeodeticTileGrid(useSwissExtent=False)
         # Input meters
         zoom = gagrid.getCeilingZoom(600)
-        self.assertEqual(zoom, 7)
+        self.assertEqual(zoom, 8)
         zoom = gagrid.getCeilingZoom(310)
-        self.assertEqual(zoom, 7)
+        self.assertEqual(zoom, 8)
         zoom = gagrid.getCeilingZoom(0.29)
-        self.assertEqual(zoom, 18)
+        self.assertEqual(zoom, 19)
         # Input degrees
         zoom = gagrid.getCeilingZoom(0.021, unit='degrees')
-        self.assertEqual(zoom, 5)
+        self.assertEqual(zoom, 6)
 
     def testTileBoundsAndAddress(self):
         gagrid = GeoadminTileGridLV03()
