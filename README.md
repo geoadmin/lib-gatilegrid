@@ -43,7 +43,12 @@ print(gagrid.tileAddressTemplate)
 topLeftCorner = [xmin, ymax]
 tileAddress = [tileCol, tileRow] = gagrid.tileAddress(zoom, topLeftCorner)
 print(tileAddress)
->>> [7, 6]
+>>> [6, 7]
+
+# Get the parent tiles
+parentZoom = 1
+gagrid.getParentTiles(zoom, tileCol, tileRow, parentZoom)
+>>> [[1, 0, 0]]
 
 # It also works if the point is within the tile
 pointInTile = [topLeftCorner[0] + 200.0, topLeftCorner[1] - 200.0]
