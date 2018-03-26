@@ -5,6 +5,8 @@ from past.builtins import xrange
 
 
 EPSG4326_METERS_PER_UNIT = math.pi * 6378137 / 180
+# Standard rendered pixel size as defined by OGC standards
+STANDARD_PIXEL_SIZE = 0.00028
 
 
 class _ResolutionsBase:
@@ -347,13 +349,12 @@ class _TileGrid(object):
         return lo - 1
 
     def getScale(self, zoom):
+        """Returns the scale at a given zoom level"""
         if self.unit == 'degrees':
             resolution = self.getResolution(zoom) * EPSG4326_METERS_PER_UNIT
         else:
             resolution = self.getResolution(zoom)
-        # Standard pixel size as defined by OGC standards
-        stdRendPxSize = 0.00028
-        return resolution / stdRendPxSize
+        return resolution / STANDARD_PIXEL_SIZE
 
     def getExtentAddress(self, zoom, extent=None, contained=False):
         """
