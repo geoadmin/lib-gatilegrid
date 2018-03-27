@@ -158,7 +158,7 @@ print(maxRow)
 ### Tests
 
 ```
-source env/bin/activate
+source .venv/bin/activate
 python setup.py test
 
 ```
