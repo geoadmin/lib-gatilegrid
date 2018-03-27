@@ -419,7 +419,7 @@ class _TileGrid(object):
         addresses = []
         for c in range(minCol, maxCol + 1):
             for r in range(minRow, maxRow + 1):
-                addresses.append([zoomParent, r, c])
+                addresses.append([zoomParent, c, r])
         return addresses
 
     @property
