@@ -623,6 +623,12 @@ class TestGeoadminTileGrid(unittest.TestCase):
         z, x, y = [25, 700, 580]
         self.assertEqual(len(grid.getParentTiles(z, x, y, 24)), 4)
 
+        # Check using the same zoom level for a child and a parent
+        tileAddresses = grid.getParentTiles(z, x, y, 25)
+        self.assertEqual(tileAddresses[0][0], 25)
+        self.assertEqual(tileAddresses[0][1], 700)
+        self.assertEqual(tileAddresses[0][2], 580)
+
     def testGetParentTilesLV03(self):
         grid = GeoadminTileGridLV03()
 
