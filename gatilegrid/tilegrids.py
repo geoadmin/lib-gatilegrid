@@ -413,6 +413,8 @@ class _TileGrid(object):
             zoomParent -- the target zoom of the parent tile
         """
         assert zoomParent <= zoom
+        if zoomParent == zoom:
+            return [[zoom, col, row]]
         extent = self.tileBounds(zoom, col, row)
         minRow, minCol, maxRow, maxCol = self.getExtentAddress(
             zoomParent, extent=extent, contained=True)
