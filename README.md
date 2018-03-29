@@ -163,17 +163,53 @@ python setup.py test
 
 ```
 
-### Upload module
+### Publish a new version of the module
 
-Make sure your libs are up to date.
+Edit `$HOME/.pypirc` and add (username and password in keepass):
 
 ```
-pip install wheel twine setuptools --upgrade
+[distutils]
+index-servers =
+  pypi
+  pypitest
+
+[pypi]
+repository=https://upload.pypi.org/legacy/
+username=iwi***
+password=
+
+[pypitest]
+repository=https://test.pypi.org/legacy/
+username=iwi***
+password=
+```
+
+Bump version in `setup.py`.
+
+Upload the new module to the test repository:
+
+```
+pip install --upgrade setuptools
 python setup.py sdist upload -r pypitest
-python setup.py sdist upload -r pypi
 python setup.py bdist_wheel upload -r pypitest
+```
+
+Test local install from test repository.
+
+```
+pip install -i https://test.pypi.org/simple/ gatilegrid
+```
+
+If everything is ok, push the new version to the default repository.
+
+```
+python setup.py sdist upload -r pypi
 python setup.py bdist_wheel upload -r pypi
 ```
+
+Test the newly created module.
+
+Create a RELEASE in github.
 
 #### CONTRIBUTORS:
 
