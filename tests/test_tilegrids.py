@@ -629,6 +629,13 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][1], 700)
         self.assertEqual(tileAddresses[0][2], 580)
 
+        # Check bottom row
+        z, x, y = [16, 2, 4]
+        tileAddresses = grid.getParentTiles(z, x, y, 16)
+        self.assertEqual(tileAddresses[0][0], 16)
+        self.assertEqual(tileAddresses[0][1], 2)
+        self.assertEqual(tileAddresses[0][2], 4)
+
     def testGetParentTilesLV03(self):
         grid = GeoadminTileGridLV03()
 
