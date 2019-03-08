@@ -14,7 +14,7 @@ except ImportError:
 
 
 setup(name='gatilegrid',
-      version='0.1.11',
+      version='0.1.12',
       description='Popular tile grids and grids API for web mapping applications',
       keywords='',
       author='Loic Gasser',
@@ -34,6 +34,7 @@ setup(name='gatilegrid',
             'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
             'Programming Language :: Python :: 3.5',
+            'Programming Language :: Python :: 3.6',
             'Topic :: Scientific/Engineering :: GIS',
             'Topic :: Software Development :: Libraries :: Python Modules'
         ],
