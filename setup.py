@@ -6,15 +6,12 @@ import os
 from setuptools import setup
 
 
-try:
-    from pypandoc import convert
-    README = convert('README.md', 'rst')
-except ImportError:
-    README = open(os.path.join(os.path.dirname(__file__), 'README.md')).read()
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 
 setup(name='gatilegrid',
-      version='0.1.12',
+      version='0.1.15',
       description='Popular tile grids and grids API for web mapping applications',
       keywords='',
       author='Loic Gasser',
@@ -39,7 +36,8 @@ setup(name='gatilegrid',
             'Topic :: Software Development :: Libraries :: Python Modules'
         ],
       zip_safe=False,
-      long_description=README,
+      long_description=long_description,
+      long_description_content_type='text/markdown',
       test_suite='nose.collector',
       install_requires=['future'],
       )
