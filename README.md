@@ -212,7 +212,7 @@ Create a RELEASE in github.
 
 #### CONTRIBUTORS:
 
-- [Loïc Gasser](https://github.com/loicgasser)
+- [Loic Gasser](https://github.com/loicgasser)
 - [Marc Monnerat](https://github.com/procrastinatio)
 - [Nadine Piveteau](https://github.com/nadine-piveteau)
 - [Marcel Clausen](https://github.com/ltclm)
