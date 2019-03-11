@@ -5,7 +5,7 @@ gatilegrid
 
 ## Geoadmin custom tile grid for web mapping applications
 
-gatilegrid is compatible with python 2.7 and 3.5
+gatilegrid is compatible with python 2.7, 3.5 and 3.6
 
 ## Installation
 
@@ -186,12 +186,12 @@ password=
 
 Bump version in `setup.py`.
 
-Upload the new module to the test repository:
+Build, check and upload the new module to the test repository:
 
 ```
-pip install --upgrade setuptools
-python setup.py sdist upload -r pypitest
-python setup.py bdist_wheel upload -r pypitest
+pip install --upgrade twine wheel setuptools
+python setup.py sdist bdist_wheel
+twine upload --repository testpypi dist/*
 ```
 
 Test local install from test repository.
@@ -203,8 +203,7 @@ pip install -i https://test.pypi.org/simple/ gatilegrid
 If everything is ok, push the new version to the default repository.
 
 ```
-python setup.py sdist upload -r pypi
-python setup.py bdist_wheel upload -r pypi
+twine upload --repository pypi dist/*
 ```
 
 Test the newly created module.
@@ -213,4 +212,8 @@ Create a RELEASE in github.
 
 #### CONTRIBUTORS:
 
-- [Loïc Gasser](https://github.com/loicgasser)
+- [Loic Gasser](https://github.com/loicgasser)
+- [Marc Monnerat](https://github.com/procrastinatio)
+- [Nadine Piveteau](https://github.com/nadine-piveteau)
+- [Marcel Clausen](https://github.com/ltclm)
+- [Gilbert Jeinziner](https://github.com/gjn)
