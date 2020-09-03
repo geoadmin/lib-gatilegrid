@@ -11,7 +11,7 @@ with open("README.md", "r") as fh:
 
 
 setup(name='gatilegrid',
-      version='0.1.19',
+      version='0.2.0',
       description='Popular tile grids and grids API for web mapping applications',
       keywords='gis wmts grid map',
       author='Loic Gasser',
@@ -33,6 +33,7 @@ setup(name='gatilegrid',
             'Programming Language :: Python :: 3.5',
             'Programming Language :: Python :: 3.6',
             'Programming Language :: Python :: 3.7',
+            'Programming Language :: Python :: 3.8',
             'Topic :: Scientific/Engineering :: GIS',
             'Topic :: Software Development :: Libraries :: Python Modules'
         ],
