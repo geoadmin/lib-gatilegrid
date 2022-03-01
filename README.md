@@ -1,11 +1,11 @@
 gatilegrid
 ===========
 
-[![Build Status](https://travis-ci.org/geoadmin/lib-gatilegrid.svg?branch=master)](https://travis-ci.org/geoadmin/lib-gatilegrid)
+![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiY1JweHpoMGV5cndNTjFRT1JXc0tNK0tyK0NSL3NoVWhXK3BFNU9DZFBEc3M5clN4RzdZMDc1czk5VUJiV1RFSk5YR0lFR1g4dVBES0FTMmpyVTNCcU0wPSIsIml2UGFyYW1ldGVyU3BlYyI6Im5qQWZtZ0lTWDFIelk0cG0iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
 ## Geoadmin custom tile grid for web mapping applications
 
-gatilegrid is compatible with python 2.7, 3.5, 3.6 and 3.7
+gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
 
 ## Installation
 
