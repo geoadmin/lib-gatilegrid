@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
-
-import math
 import unittest
 from gatilegrid import getTileGrid, GeoadminTileGridLV03, \
     GeoadminTileGridLV95, GlobalMercatorTileGrid, GlobalGeodeticTileGrid
 
 
 class TestGeoadminTileGrid(unittest.TestCase):
-
     def testgetTileGrid(self):
         tileGrid = getTileGrid(21781)
         self.assertIs(tileGrid, GeoadminTileGridLV03)
@@ -205,8 +201,10 @@ class TestGeoadminTileGrid(unittest.TestCase):
     def testIterGridWithExtent(self):
         offset = 20000.0
         gagridDefault = GeoadminTileGridLV03()
-        extent = [gagridDefault.MINX + offset, gagridDefault.MINY + offset,
-                  gagridDefault.MAXX - offset, gagridDefault.MAXY - offset]
+        extent = [
+            gagridDefault.MINX + offset, gagridDefault.MINY + offset,
+            gagridDefault.MAXX - offset, gagridDefault.MAXY - offset
+        ]
         gagridExtent = GeoadminTileGridLV03(extent=extent)
 
         self.assertGreater(gagridDefault.xSpan, gagridExtent.xSpan)
@@ -416,7 +414,8 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(nb, 8)
 
         grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
-                                      tmsCompatible=True, useSwissExtent=False)
+                                      tmsCompatible=True,
+                                      useSwissExtent=False)
         zoom = 0
         nb = grid.numberOfTilesAtZoom(zoom)
         nbx = grid.numberOfXTilesAtZoom(zoom)
@@ -507,10 +506,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(ya, y)
 
     def testGetParentTilesGlobalGeodeticTopLeft(self):
-        grid = GlobalGeodeticTileGrid(
-            originCorner='top-left',
-            tmsCompatible=False,
-            useSwissExtent=False)
+        grid = GlobalGeodeticTileGrid(originCorner='top-left',
+                                      tmsCompatible=False,
+                                      useSwissExtent=False)
 
         nb = grid.numberOfTilesAtZoom(1)
         self.assertEqual(nb, 2)
@@ -536,10 +534,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][2], 1)
 
     def testGetParentTilesGlobalGeodeticTopLeftUseSwiss(self):
-        grid = GlobalGeodeticTileGrid(
-            originCorner='top-left',
-            tmsCompatible=False,
-            useSwissExtent=True)
+        grid = GlobalGeodeticTileGrid(originCorner='top-left',
+                                      tmsCompatible=False,
+                                      useSwissExtent=True)
 
         nb = grid.numberOfTilesAtZoom(1)
         self.assertEqual(nb, 1)
@@ -565,10 +562,9 @@ class TestGeoadminTileGrid(unittest.TestCase):
         self.assertEqual(tileAddresses[0][2], 1)
 
     def testGetParentTilesGlobalGeodeticBottomLeft(self):
-        grid = GlobalGeodeticTileGrid(
-            originCorner='bottom-left',
-            tmsCompatible=False,
-            useSwissExtent=False)
+        grid = GlobalGeodeticTileGrid(originCorner='bottom-left',
+                                      tmsCompatible=False,
+                                      useSwissExtent=False)
 
         nb = grid.numberOfTilesAtZoom(1)
         self.assertEqual(nb, 2)

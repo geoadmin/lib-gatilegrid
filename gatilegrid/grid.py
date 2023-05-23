@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-from past.builtins import xrange
 
 
 class Grid:
@@ -34,8 +33,8 @@ class Grid:
         self._setExtentAddress()
 
     def __iter__(self):
-        for col in xrange(0, self.nbCellsX):
-            for row in xrange(0, self.nbCellsY):
+        for col in range(0, self.nbCellsX):
+            for row in range(0, self.nbCellsY):
                 cellExtent = self.cellExtent(col, row)
                 yield (cellExtent, col, row)
 
@@ -78,10 +77,7 @@ class Grid:
             col = max(0, col - 1)
         if y in (self.MINY, self.MAXY) and row.is_integer():
             row = max(0, row - 1)
-        return [
-            int(math.floor(col)),
-            int(math.floor(row))
-        ]
+        return [int(math.floor(col)), int(math.floor(row))]
 
     def getExtentAddress(self, extent):
         fromCellCoordinate = extent[:2]
@@ -90,8 +86,12 @@ class Grid:
             self.cellAddressFromPointCoordinate(fromCellCoordinate)
         colTo, rowTo = \
             self.cellAddressFromPointCoordinate(toCellCoordinate)
-        return [min(colFrom, colTo), min(rowFrom, rowTo),
-                max(colFrom, colTo), max(rowFrom, rowTo)]
+        return [
+            min(colFrom, colTo),
+            min(rowFrom, rowTo),
+            max(colFrom, colTo),
+            max(rowFrom, rowTo)
+        ]
 
     def inExtent(self, pointCoordinate):
         [x, y] = pointCoordinate

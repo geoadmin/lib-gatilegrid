@@ -5,7 +5,7 @@ gatilegrid
 
 ## Geoadmin custom tile grid for web mapping applications
 
-gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
+gatilegrid is compatible with python 3.7, 3.8, 3.9
 
 ## Installation
 

@@ -1,6 +1,5 @@
 from .tilegrids import GeoadminTileGridLV03, GeoadminTileGridLV95, \
     GlobalMercatorTileGrid, GlobalGeodeticTileGrid
-from .grid import Grid
 
 
 def getTileGrid(srs):

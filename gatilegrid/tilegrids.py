@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import math
-from past.builtins import xrange
-
 
 EPSG4326_METERS_PER_UNIT = math.pi * 6378137 / 180
 # Standard rendered pixel size as defined by OGC standards
@@ -12,35 +10,9 @@ STANDARD_PIXEL_SIZE = 0.00028
 class _ResolutionsBase:
     # Defines zooms 0 to 27
     RESOLUTIONS = [
-        4000.0,
-        3750.0,
-        3500.0,
-        3250.0,
-        3000.0,
-        2750.0,
-        2500.0,
-        2250.0,
-        2000.0,
-        1750.0,
-        1500.0,
-        1250.0,
-        1000.0,
-        750.0,
-        650.0,
-        500.0,
-        250.0,
-        100.0,
-        50.0,
-        20.0,
-        10.0,
-        5.0,
-        2.5,
-        2.0,
-        1.5,
-        1.0,
-        0.5,
-        0.25,
-        0.1
+        4000.0, 3750.0, 3500.0, 3250.0, 3000.0, 2750.0, 2500.0, 2250.0, 2000.0,
+        1750.0, 1500.0, 1250.0, 1000.0, 750.0, 650.0, 500.0, 250.0, 100.0,
+        50.0, 20.0, 10.0, 5.0, 2.5, 2.0, 1.5, 1.0, 0.5, 0.25, 0.1
     ]
 
 
@@ -93,30 +65,14 @@ class _MercatorBase:
     # origin at the top left a la Google
     # OSGEO:41001 puts the origin at the bottom left
     RESOLUTIONS = [
-        156543.03392804097,
-        78271.51696402048,
-        39135.75848201024,
-        19567.87924100512,
-        9783.93962050256,
-        4891.96981025128,
-        2445.98490512564,
-        1222.99245256282,
-        611.49622628141,
-        305.748113140705,
-        152.8740565703525,
-        76.43702828517625,
-        38.21851414258813,
-        19.109257071294063,
-        9.554628535647032,
-        4.777314267823516,
-        2.388657133911758,
-        1.194328566955879,
-        0.5971642834779395,
-        0.29858214173896974,
-        0.14929107086948487,
-        0.07464553543474244,
-        0.03732276771737122,
-        0.01866138385868561
+        156543.03392804097, 78271.51696402048, 39135.75848201024,
+        19567.87924100512, 9783.93962050256, 4891.96981025128,
+        2445.98490512564, 1222.99245256282, 611.49622628141, 305.748113140705,
+        152.8740565703525, 76.43702828517625, 38.21851414258813,
+        19.109257071294063, 9.554628535647032, 4.777314267823516,
+        2.388657133911758, 1.194328566955879, 0.5971642834779395,
+        0.29858214173896974, 0.14929107086948487, 0.07464553543474244,
+        0.03732276771737122, 0.01866138385868561
     ]
 
     MINX = -20037508.342789244
@@ -165,13 +121,16 @@ class _GeodeticBase:
             self.resFact = 180.0 / tileSizePx  # Cesium terrain
         else:
             self.resFact = 360.0 / tileSizePx  # OpenLayers
-        self.RESOLUTIONS = [self.resFact / 2 ** z for z in range(0, 25)]
+        self.RESOLUTIONS = [self.resFact / 2**z for z in range(0, 25)]
 
 
 class _TileGrid(object):
-
-    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left',
-                 tmsCompatible=None, useSwissExtent=True):
+    def __init__(self,
+                 extent=None,
+                 tileSizePx=256.0,
+                 originCorner='top-left',
+                 tmsCompatible=None,
+                 useSwissExtent=True):
         assert originCorner in ('bottom-left', 'top-left')
         self.originCorner = originCorner
 
@@ -222,6 +181,7 @@ class _TileGrid(object):
     def tileAddress(self, zoom, point):
         "Returns a tile address based on a zoom level and \
         a point in the tile"
+
         [x, y] = point
         assert x <= self.MAXX and x >= self.MINX
         assert y <= self.MAXY and y >= self.MINY
@@ -240,10 +200,7 @@ class _TileGrid(object):
             col = max(0, col - 1)
         if y in (self.MINY, self.MAXY) and row.is_integer():
             row = max(0, row - 1)
-        return [
-            int(math.floor(col)),
-            int(math.floor(row))
-        ]
+        return [int(math.floor(col)), int(math.floor(row))]
 
     def intersectsExtent(self, extent):
         "Determine if an extent intersects this instance extent"
@@ -257,10 +214,10 @@ class _TileGrid(object):
         assert maxZoom in range(0, len(self.RESOLUTIONS))
         assert minZoom <= maxZoom
 
-        for zoom in xrange(minZoom, maxZoom + 1):
+        for zoom in range(minZoom, maxZoom + 1):
             [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
-            for row in xrange(minRow, maxRow + 1):
-                for col in xrange(minCol, maxCol + 1):
+            for row in range(minRow, maxRow + 1):
+                for col in range(minCol, maxCol + 1):
                     tileBounds = self.tileBounds(zoom, col, row)
                     yield (tileBounds, zoom, col, row)
 
@@ -287,7 +244,7 @@ class _TileGrid(object):
             maxZoom = maxZoom + 1
         else:
             maxZoom = len(self.RESOLUTIONS)
-        for zoom in xrange(minZoom, maxZoom):
+        for zoom in range(minZoom, maxZoom):
             nbTiles += self.numberOfTilesAtZoom(zoom)
         return nbTiles
 
@@ -416,8 +373,9 @@ class _TileGrid(object):
         if zoomParent == zoom:
             return [[zoom, col, row]]
         extent = self.tileBounds(zoom, col, row)
-        minRow, minCol, maxRow, maxCol = self.getExtentAddress(
-            zoomParent, extent=extent, contained=True)
+        minRow, minCol, maxRow, maxCol = self.getExtentAddress(zoomParent,
+                                                               extent=extent,
+                                                               contained=True)
         addresses = []
         for c in range(minCol, maxCol + 1):
             for r in range(minRow, maxRow + 1):
@@ -436,55 +394,48 @@ class _TileGrid(object):
 
 
 class GeoadminTileGridLV03(_LV03Base, _TileGrid):
-
     def __init__(self,
                  extent=None,
                  tileSizePx=256.0,
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GeoadminTileGridLV03, self).__init__(
-            extent=extent,
-            tileSizePx=tileSizePx,
-            originCorner=originCorner,
-            useSwissExtent=useSwissExtent
-        )
+        super(GeoadminTileGridLV03,
+              self).__init__(extent=extent,
+                             tileSizePx=tileSizePx,
+                             originCorner=originCorner,
+                             useSwissExtent=useSwissExtent)
 
 
 class GeoadminTileGridLV95(_LV95Base, _TileGrid):
-
     def __init__(self,
                  extent=None,
                  tileSizePx=256.0,
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GeoadminTileGridLV95, self).__init__(
-            extent=extent,
-            tileSizePx=tileSizePx,
-            originCorner=originCorner,
-            useSwissExtent=useSwissExtent
-        )
+        super(GeoadminTileGridLV95,
+              self).__init__(extent=extent,
+                             tileSizePx=tileSizePx,
+                             originCorner=originCorner,
+                             useSwissExtent=useSwissExtent)
 
 
 class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
-
     def __init__(self,
                  extent=None,
                  tileSizePx=256.0,
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GlobalMercatorTileGrid, self).__init__(
-            extent=extent,
-            tileSizePx=tileSizePx,
-            originCorner=originCorner,
-            useSwissExtent=useSwissExtent
-        )
+        super(GlobalMercatorTileGrid,
+              self).__init__(extent=extent,
+                             tileSizePx=tileSizePx,
+                             originCorner=originCorner,
+                             useSwissExtent=useSwissExtent)
 
 
 class GlobalGeodeticTileGrid(_GeodeticBase, _TileGrid):
-
     def __init__(self,
                  extent=None,
                  tileSizePx=256.0,
@@ -492,10 +443,9 @@ class GlobalGeodeticTileGrid(_GeodeticBase, _TileGrid):
                  tmsCompatible=True,
                  useSwissExtent=True):
 
-        super(GlobalGeodeticTileGrid, self).__init__(
-            extent=extent,
-            tileSizePx=tileSizePx,
-            originCorner=originCorner,
-            tmsCompatible=tmsCompatible,
-            useSwissExtent=useSwissExtent
-        )
+        super(GlobalGeodeticTileGrid,
+              self).__init__(extent=extent,
+                             tileSizePx=tileSizePx,
+                             originCorner=originCorner,
+                             tmsCompatible=tmsCompatible,
+                             useSwissExtent=useSwissExtent)
