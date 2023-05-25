@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='gatilegrid',
-    version='0.2.1',
+    version='0.3.0',
     description='Popular tile grids and grids API for web mapping applications',
     keywords='gis wmts grid map',
     author='Loic Gasser',
