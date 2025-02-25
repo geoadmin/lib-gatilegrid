@@ -1,7 +1,7 @@
 gatilegrid
 ===========
 
-![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiY1JweHpoMGV5cndNTjFRT1JXc0tNK0tyK0NSL3NoVWhXK3BFNU9DZFBEc3M5clN4RzdZMDc1czk5VUJiV1RFSk5YR0lFR1g4dVBES0FTMmpyVTNCcU0wPSIsIml2UGFyYW1ldGVyU3BlYyI6Im5qQWZtZ0lTWDFIelk0cG0iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiZURKRldZcHgrMnlSYlM3ZUVyU1ZndmlGbktXYVNnc2FRU1RTRDlaZnNoMm92QkM2WjRCcnUrU21ZeFhMOHVEaE5yaEY4Zmk5b2J0aEJPVVgycmVRakJNPSIsIml2UGFyYW1ldGVyU3BlYyI6ImtuUWYzUHp5WUhDMVo0UGIiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
 ## Geoadmin custom tile grid for web mapping applications
 
