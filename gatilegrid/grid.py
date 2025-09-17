@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 import math
-from past.builtins import xrange
 
 
 class Grid:
@@ -34,8 +31,8 @@ class Grid:
         self._setExtentAddress()
 
     def __iter__(self):
-        for col in xrange(0, self.nbCellsX):
-            for row in xrange(0, self.nbCellsY):
+        for col in range(0, self.nbCellsX):
+            for row in range(0, self.nbCellsY):
                 cellExtent = self.cellExtent(col, row)
                 yield (cellExtent, col, row)
 

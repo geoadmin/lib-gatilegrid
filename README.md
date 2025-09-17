@@ -1,11 +1,6 @@
-gatilegrid
-===========
+# gatilegrid
 
-![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiY1JweHpoMGV5cndNTjFRT1JXc0tNK0tyK0NSL3NoVWhXK3BFNU9DZFBEc3M5clN4RzdZMDc1czk5VUJiV1RFSk5YR0lFR1g4dVBES0FTMmpyVTNCcU0wPSIsIml2UGFyYW1ldGVyU3BlYyI6Im5qQWZtZ0lTWDFIelk0cG0iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
-
-## Geoadmin custom tile grid for web mapping applications
-
-gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
+Geoadmin custom tile grid for web mapping applications.
 
 ## Installation
 
@@ -13,7 +8,7 @@ gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
 $ pip install gatilegrid
 ```
 
-### Usage
+## Usage
 
 Several tile grids are supported, namely 21781, 2056, 3857 and 4326. Here is an exemple using 21781.
 For 4326, an additional parameter is available (`tmsCompatible=True`).
@@ -155,65 +150,25 @@ print(maxRow)
 >>> 1959
 ```
 
+## Local Development
+
+### Setup
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install .
+pip install nose2 flake8
+```
+
 ### Tests
 
-```
-source .venv/bin/activate
-python setup.py test
-
+```bash
+nose2 tests
 ```
 
-### Publish a new version of the module
+### Linting
 
-Edit `$HOME/.pypirc` and add (username and password in keepass):
-
+```bash
+flake8 --ignore=F401 gatilegrid tests
 ```
-[distutils]
-index-servers =
-  pypi
-  pypitest
-
-[pypi]
-repository=https://upload.pypi.org/legacy/
-username=iwi***
-password=
-
-[pypitest]
-repository=https://test.pypi.org/legacy/
-username=iwi***
-password=
-```
-
-Bump version in `setup.py`.
-
-Build, check and upload the new module to the test repository:
-
-```
-pip install --upgrade twine wheel setuptools
-python setup.py sdist bdist_wheel
-twine upload --repository testpypi dist/*
-```
-
-Test local install from test repository.
-
-```
-pip install -i https://test.pypi.org/simple/ gatilegrid
-```
-
-If everything is ok, push the new version to the default repository.
-
-```
-twine upload --repository pypi dist/*
-```
-
-Test the newly created module.
-
-Create a RELEASE in github.
-
-#### CONTRIBUTORS:
-
-- [Loic Gasser](https://github.com/loicgasser)
-- [Marc Monnerat](https://github.com/procrastinatio)
-- [Nadine Piveteau](https://github.com/nadine-piveteau)
-- [Marcel Clausen](https://github.com/ltclm)
-- [Gilbert Jeinziner](https://github.com/gjn)

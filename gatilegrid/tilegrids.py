@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
 import math
-from past.builtins import xrange
 
 
 EPSG4326_METERS_PER_UNIT = math.pi * 6378137 / 180
@@ -257,10 +254,10 @@ class _TileGrid(object):
         assert maxZoom in range(0, len(self.RESOLUTIONS))
         assert minZoom <= maxZoom
 
-        for zoom in xrange(minZoom, maxZoom + 1):
+        for zoom in range(minZoom, maxZoom + 1):
             [minRow, minCol, maxRow, maxCol] = self.getExtentAddress(zoom)
-            for row in xrange(minRow, maxRow + 1):
-                for col in xrange(minCol, maxCol + 1):
+            for row in range(minRow, maxRow + 1):
+                for col in range(minCol, maxCol + 1):
                     tileBounds = self.tileBounds(zoom, col, row)
                     yield (tileBounds, zoom, col, row)
 
@@ -287,7 +284,7 @@ class _TileGrid(object):
             maxZoom = maxZoom + 1
         else:
             maxZoom = len(self.RESOLUTIONS)
-        for zoom in xrange(minZoom, maxZoom):
+        for zoom in range(minZoom, maxZoom):
             nbTiles += self.numberOfTilesAtZoom(zoom)
         return nbTiles
 
@@ -443,7 +440,7 @@ class GeoadminTileGridLV03(_LV03Base, _TileGrid):
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GeoadminTileGridLV03, self).__init__(
+        super().__init__(
             extent=extent,
             tileSizePx=tileSizePx,
             originCorner=originCorner,
@@ -459,7 +456,7 @@ class GeoadminTileGridLV95(_LV95Base, _TileGrid):
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GeoadminTileGridLV95, self).__init__(
+        super().__init__(
             extent=extent,
             tileSizePx=tileSizePx,
             originCorner=originCorner,
@@ -475,7 +472,7 @@ class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
                  originCorner='top-left',
                  useSwissExtent=True):
 
-        super(GlobalMercatorTileGrid, self).__init__(
+        super().__init__(
             extent=extent,
             tileSizePx=tileSizePx,
             originCorner=originCorner,
@@ -492,7 +489,7 @@ class GlobalGeodeticTileGrid(_GeodeticBase, _TileGrid):
                  tmsCompatible=True,
                  useSwissExtent=True):
 
-        super(GlobalGeodeticTileGrid, self).__init__(
+        super().__init__(
             extent=extent,
             tileSizePx=tileSizePx,
             originCorner=originCorner,

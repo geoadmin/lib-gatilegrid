@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# HACK for `nose.collector` to work on python 2.7.3 and earlier
-import multiprocessing
-import os
 from setuptools import setup
 
 
@@ -11,7 +6,7 @@ with open("README.md", "r") as fh:
 
 
 setup(name='gatilegrid',
-      version='0.2.0',
+      version='1.0.0',
       description='Popular tile grids and grids API for web mapping applications',
       keywords='gis wmts grid map',
       author='Loic Gasser',
@@ -27,20 +22,17 @@ setup(name='gatilegrid',
             'License :: OSI Approved :: MIT License',
             'Operating System :: OS Independent',
             'Programming Language :: Python',
-            'Programming Language :: Python :: 2',
-            'Programming Language :: Python :: 2.7',
             'Programming Language :: Python :: 3',
-            'Programming Language :: Python :: 3.5',
-            'Programming Language :: Python :: 3.6',
-            'Programming Language :: Python :: 3.7',
-            'Programming Language :: Python :: 3.8',
+            'Programming Language :: Python :: 3.10',
+            'Programming Language :: Python :: 3.11',
+            'Programming Language :: Python :: 3.12',
+            'Programming Language :: Python :: 3.13',
             'Topic :: Scientific/Engineering :: GIS',
             'Topic :: Software Development :: Libraries :: Python Modules'
         ],
       zip_safe=False,
       long_description=long_description,
       long_description_content_type='text/markdown',
-      test_suite='nose.collector',
-      install_requires=['future'],
-      python_requires='>2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4',
+      install_requires=[],
+      python_requires='>=3.10',
       )

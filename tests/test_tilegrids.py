@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import math
 import unittest
 from gatilegrid import getTileGrid, GeoadminTileGridLV03, \
