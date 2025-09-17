@@ -1,0 +1,13 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+flake8 = "*"
+nose2 = { version = "*", extras = ["coverage_plugin"] }
+yapf = "*"
+pylint = "*"
+isort = "*"
+setuptools = "*"
+build = "*"

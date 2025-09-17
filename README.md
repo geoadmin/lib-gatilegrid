@@ -155,20 +155,20 @@ print(maxRow)
 ### Setup
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install .
-pip install nose2 flake8
+make setup
 ```
 
 ### Tests
 
 ```bash
-nose2 tests
+make test
 ```
 
-### Linting
+### Formatting and Linting
 
 ```bash
-flake8 --ignore=F401 gatilegrid tests
+make format
+make lint
+#or
+make format-lint
 ```

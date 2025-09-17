@@ -1,6 +1,5 @@
 import math
 
-
 EPSG4326_METERS_PER_UNIT = math.pi * 6378137 / 180
 # Standard rendered pixel size as defined by OGC standards
 STANDARD_PIXEL_SIZE = 0.00028
@@ -162,13 +161,19 @@ class _GeodeticBase:
             self.resFact = 180.0 / tileSizePx  # Cesium terrain
         else:
             self.resFact = 360.0 / tileSizePx  # OpenLayers
-        self.RESOLUTIONS = [self.resFact / 2 ** z for z in range(0, 25)]
+        self.RESOLUTIONS = [self.resFact / 2**z for z in range(0, 25)]
 
 
 class _TileGrid(object):
 
-    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left',
-                 tmsCompatible=None, useSwissExtent=True):
+    def __init__(
+        self,
+        extent=None,
+        tileSizePx=256.0,
+        originCorner='top-left',
+        tmsCompatible=None,
+        useSwissExtent=True
+    ):
         assert originCorner in ('bottom-left', 'top-left')
         self.originCorner = originCorner
 
@@ -237,10 +242,7 @@ class _TileGrid(object):
             col = max(0, col - 1)
         if y in (self.MINY, self.MAXY) and row.is_integer():
             row = max(0, row - 1)
-        return [
-            int(math.floor(col)),
-            int(math.floor(row))
-        ]
+        return [int(math.floor(col)), int(math.floor(row))]
 
     def intersectsExtent(self, extent):
         "Determine if an extent intersects this instance extent"
@@ -434,11 +436,7 @@ class _TileGrid(object):
 
 class GeoadminTileGridLV03(_LV03Base, _TileGrid):
 
-    def __init__(self,
-                 extent=None,
-                 tileSizePx=256.0,
-                 originCorner='top-left',
-                 useSwissExtent=True):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left', useSwissExtent=True):
 
         super().__init__(
             extent=extent,
@@ -450,11 +448,7 @@ class GeoadminTileGridLV03(_LV03Base, _TileGrid):
 
 class GeoadminTileGridLV95(_LV95Base, _TileGrid):
 
-    def __init__(self,
-                 extent=None,
-                 tileSizePx=256.0,
-                 originCorner='top-left',
-                 useSwissExtent=True):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left', useSwissExtent=True):
 
         super().__init__(
             extent=extent,
@@ -466,11 +460,7 @@ class GeoadminTileGridLV95(_LV95Base, _TileGrid):
 
 class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
 
-    def __init__(self,
-                 extent=None,
-                 tileSizePx=256.0,
-                 originCorner='top-left',
-                 useSwissExtent=True):
+    def __init__(self, extent=None, tileSizePx=256.0, originCorner='top-left', useSwissExtent=True):
 
         super().__init__(
             extent=extent,
@@ -482,12 +472,14 @@ class GlobalMercatorTileGrid(_MercatorBase, _TileGrid):
 
 class GlobalGeodeticTileGrid(_GeodeticBase, _TileGrid):
 
-    def __init__(self,
-                 extent=None,
-                 tileSizePx=256.0,
-                 originCorner='top-left',
-                 tmsCompatible=True,
-                 useSwissExtent=True):
+    def __init__(
+        self,
+        extent=None,
+        tileSizePx=256.0,
+        originCorner='top-left',
+        tmsCompatible=True,
+        useSwissExtent=True
+    ):
 
         super().__init__(
             extent=extent,
