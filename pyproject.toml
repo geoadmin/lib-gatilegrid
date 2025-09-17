@@ -1,14 +1,13 @@
 [build-system]
-requires = ["setuptools", "build"]
+requires = ["setuptools>=77.0.0", "build", "setuptools-git-versioning<2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "gatilegrid"
-version = "1.0.0"
 requires-python = ">=3.0"
 description = "Popular tile grids and grids API for web mapping applications"
 readme = "README.md"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Loic Gasser", email = "loicgasser4@gmail.com"}
 ]
@@ -22,6 +21,7 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules"
 ]
 keywords = ["gis", "wmts", "grid", "map"]
+dynamic = ["version"]
 
 [project.urls]
 Homepage = "https://github.com/geoadmin/lib-gatilegrid"
@@ -31,3 +31,8 @@ Tracker = "https://github.com/geoadmin/lib-gatilegrid/issues"
 
 [tool.setuptools.packages.find]
 include = ["gatilegrid*"]
+
+[tool.setuptools-git-versioning]
+enabled = true
+dev_template = "{tag}+git.{sha}"
+dirty_template = "{tag}+git.{sha}.dirty"
