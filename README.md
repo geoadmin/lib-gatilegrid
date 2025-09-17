@@ -172,3 +172,11 @@ make lint
 #or
 make format-lint
 ```
+
+## Release and Publish
+
+New release and publish on PyPI is done automatically upon PR merge into master branch. For bug fixes and small new features, PR can be directly open on master. Then the PR title define the version bump as follow:
+
+- PR title and/or commit message contains #major => major version is bumped
+- PR title and/or commit message contains #patch or head branch name starts with bug-|hotfix-|bugfix- => patch version is bumped
+- Otherwise by default the minor version is bumped
