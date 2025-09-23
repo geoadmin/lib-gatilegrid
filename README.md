@@ -1,11 +1,6 @@
-gatilegrid
-===========
+# gatilegrid
 
-![Build Status](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiY1JweHpoMGV5cndNTjFRT1JXc0tNK0tyK0NSL3NoVWhXK3BFNU9DZFBEc3M5clN4RzdZMDc1czk5VUJiV1RFSk5YR0lFR1g4dVBES0FTMmpyVTNCcU0wPSIsIml2UGFyYW1ldGVyU3BlYyI6Im5qQWZtZ0lTWDFIelk0cG0iLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
-
-## Geoadmin custom tile grid for web mapping applications
-
-gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
+Geoadmin custom tile grid for web mapping applications.
 
 ## Installation
 
@@ -13,7 +8,7 @@ gatilegrid is compatible with python 2.7, 3.5, 3.6, 3.7 and 3.8
 $ pip install gatilegrid
 ```
 
-### Usage
+## Usage
 
 Several tile grids are supported, namely 21781, 2056, 3857 and 4326. Here is an exemple using 21781.
 For 4326, an additional parameter is available (`tmsCompatible=True`).
@@ -155,65 +150,33 @@ print(maxRow)
 >>> 1959
 ```
 
+## Local Development
+
+### Setup
+
+```bash
+make setup
+```
+
 ### Tests
 
-```
-source .venv/bin/activate
-python setup.py test
-
+```bash
+make test
 ```
 
-### Publish a new version of the module
+### Formatting and Linting
 
-Edit `$HOME/.pypirc` and add (username and password in keepass):
-
-```
-[distutils]
-index-servers =
-  pypi
-  pypitest
-
-[pypi]
-repository=https://upload.pypi.org/legacy/
-username=iwi***
-password=
-
-[pypitest]
-repository=https://test.pypi.org/legacy/
-username=iwi***
-password=
+```bash
+make format
+make lint
+#or
+make format-lint
 ```
 
-Bump version in `setup.py`.
+## Release and Publish
 
-Build, check and upload the new module to the test repository:
+New release and publish on PyPI is done automatically upon PR merge into master branch. For bug fixes and small new features, PR can be directly open on master. Then the PR title define the version bump as follow:
 
-```
-pip install --upgrade twine wheel setuptools
-python setup.py sdist bdist_wheel
-twine upload --repository testpypi dist/*
-```
-
-Test local install from test repository.
-
-```
-pip install -i https://test.pypi.org/simple/ gatilegrid
-```
-
-If everything is ok, push the new version to the default repository.
-
-```
-twine upload --repository pypi dist/*
-```
-
-Test the newly created module.
-
-Create a RELEASE in github.
-
-#### CONTRIBUTORS:
-
-- [Loic Gasser](https://github.com/loicgasser)
-- [Marc Monnerat](https://github.com/procrastinatio)
-- [Nadine Piveteau](https://github.com/nadine-piveteau)
-- [Marcel Clausen](https://github.com/ltclm)
-- [Gilbert Jeinziner](https://github.com/gjn)
+- PR title and/or commit message contains #major => major version is bumped
+- PR title and/or commit message contains #patch or head branch name starts with bug-|hotfix-|bugfix- => patch version is bumped
+- Otherwise by default the minor version is bumped
