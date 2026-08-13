@@ -1,0 +1,29 @@
+[MAIN]
+ignore=.venv
+
+[MESSAGES CONTROL]
+disable=
+    # no convention and refactor rules
+    C,
+    R,
+    # allow some unconventional stuff (assuming the library already works as intended)
+    unused-variable,
+    attribute-defined-outside-init,
+    unused-import,
+    possibly-used-before-assignment
+
+generated-members=
+    # added via mixins
+    gatilegrid.tilegrids._TileGrid.MINX
+    gatilegrid.tilegrids._TileGrid.MAXX
+    gatilegrid.tilegrids._TileGrid.MINY
+    gatilegrid.tilegrids._TileGrid.MAXY
+    gatilegrid.tilegrids._TileGrid.RESOLUTIONS
+    gatilegrid.tilegrids._TileGrid.spatialReference
+    gatilegrid.tilegrids._TileGrid.tileAddressTemplate
+    gatilegrid.tilegrids._TileGrid.unit
+    gatilegrid.tilegrids._TileGrid.metersPerUnit
+    gatilegrid.tilegrids._TileGrid.
+
+[REPORTS]
+score = no
